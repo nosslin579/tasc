@@ -1,0 +1,29 @@
+{
+  "info": {
+    "name": "TestRojale",
+    "author": "Rojale",
+    "gameMode": "normal"
+  },
+  "switches": {},
+  "fields": {},
+  "portals": {},
+  "marsballs": [],
+  "spawnPoints": {
+    "red": [
+      {
+        "x": 15,
+        "y": 3,
+        "radius": 5,
+        "weight": 1
+      }
+    ],
+    "blue": [
+      {
+        "x": 15,
+        "y": 6,
+        "radius": 5,
+        "weight": 1
+      }
+    ]
+  }
+}

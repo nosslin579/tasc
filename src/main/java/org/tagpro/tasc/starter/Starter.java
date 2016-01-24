@@ -107,7 +107,7 @@ public class Starter {
         }
 
         publisher.setSubscribers(subscribers);
-        Command command = new Command(socket, publisher);
+        Command command = new KeyStateCheckCommand(socket, publisher);
         publisher.init(command);
         socket.connect();
         return new GameInfo(socket, gameURI, publisher, command);

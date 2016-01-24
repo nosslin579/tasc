@@ -50,6 +50,7 @@ public class Command {
     }
 
     public void disconnect() {
+        log.info("Disconnecting");
         socket.disconnect();
         publisher.disconnect();
     }

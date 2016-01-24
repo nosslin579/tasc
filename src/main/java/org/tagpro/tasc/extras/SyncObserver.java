@@ -1,9 +1,15 @@
 package org.tagpro.tasc.extras;
 
-import org.tagpro.tasc.KeyChange;
-
-import java.util.List;
+import org.tagpro.tasc.PlayerState;
 
 public interface SyncObserver {
-    void step(int serverStep, List<KeyChange> unregisteredKeyChanges);
+
+    /**
+     * This method forwards world a couple of steps and tries to estimate where ball is and how fast it is going.
+     * Act on this method instead of <i>update</i> where you get the ball location with up to 200ms delay.
+     * Fired each step.
+     *
+     * @param self estimate of own ball speed and location at server plus ping
+     */
+    void currentLocation(PlayerState self);
 }

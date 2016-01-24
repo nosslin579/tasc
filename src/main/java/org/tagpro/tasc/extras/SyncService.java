@@ -3,6 +3,7 @@ package org.tagpro.tasc.extras;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.*;
+import org.tagpro.tasc.listeners.BallUpdate;
 import org.tagpro.tasc.listeners.GameState;
 import org.tagpro.tasc.listeners.KeyUpdate;
 
@@ -23,6 +24,7 @@ public class SyncService implements GameSubscriber, Runnable {
     private AtomicInteger stepAtServer = new AtomicInteger(0);
     private final Map<Key, KeyAction> state = new ConcurrentHashMap<>();
     private Command command;
+    private TagProWorld world = new TagProWorld(1, 1);
 
 
     public SyncService(SyncObserver observer, Executor publisherExecutor) {
@@ -61,13 +63,14 @@ public class SyncService implements GameSubscriber, Runnable {
 
 
     @Override
-    public void onUpdate(int step, Map<Integer, Update> ret) {
-        Update update = ret.get(id);
+    public void onUpdate(final int step, Map<Integer, Update> updates) {
+        Update update = updates.get(id);
         if (update == null) {
             //Not self player
             return;
         }
 
+        //Sync expected step
         for (KeyUpdate ku : update.getKeyUpdate()) {
             KeyChange unregisteredKeyChange = unregisteredKeyChanges.getOrDefault(ku.getCounter(), null);
             if (unregisteredKeyChange == null || ku.getCounter() == 0) {//counter == 0 means init
@@ -90,11 +93,23 @@ public class SyncService implements GameSubscriber, Runnable {
                 scheduledExecutorService.submit(this);
             }
         }
+
+
+        final BallUpdate ballUpdate = update.getBallUpdate();
+        if (ballUpdate != null) {
+            //updating self
+            scheduledExecutorService.submit(() -> {
+                world.getSelf().setBodyPositionAndVelocity(ballUpdate);
+                world.setStep(step);
+            });
+        }
+
     }
 
     @Override
     public void onId(int id) {
         this.id = id;
+        world = new TagProWorld(id, 1);
         long initialDelay = TimeUnit.SECONDS.toNanos(1);
         scheduledExecutorService.scheduleAtFixedRate(this, initialDelay, TagProWorld.STEP_NS, TimeUnit.NANOSECONDS);
     }
@@ -113,11 +128,14 @@ public class SyncService implements GameSubscriber, Runnable {
     @Override
     public void run() {
         //Because we want the possibility to make the bot single threaded.
+        Collection<KeyChange> values = unregisteredKeyChanges.values();
+        List<KeyChange> es = new ArrayList<>(values);
+        int step = stepAtServer.incrementAndGet();
+        world.proceedToStep(step);
+        PlayerState player = world.getSelf().getPlayerState();
         publisherExecutor.execute(() -> {
             try {
-                Collection<KeyChange> values = unregisteredKeyChanges.values();
-                List<KeyChange> es = new ArrayList<>(values);
-                observer.step(stepAtServer.incrementAndGet(), es);
+                observer.currentLocation(player);
             } catch (Exception e) {
                 log.error("Error executing step:" + stepAtServer, e);
                 System.exit(1);

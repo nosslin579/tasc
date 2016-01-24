@@ -13,7 +13,12 @@ public interface GameSubscriber {
     default void onException(Exception e, Object[] args) {
     }
 
-    default void onUpdate(int step, Map<Integer, Update> ret) {
+    /**
+     * Fired each time p is sent to client
+     * @param step the current step
+     * @param updates Map of each player where key is id.
+     */
+    default void onUpdate(int step, Map<Integer, Update> updates) {
     }
 
     default void onId(int id) {

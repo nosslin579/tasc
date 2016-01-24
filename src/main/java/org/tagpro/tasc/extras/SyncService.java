@@ -20,11 +20,11 @@ public class SyncService implements GameSubscriber, Runnable {
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory("SyncService"));
     //Key=count, Value=KeyAction
     private Map<Integer, KeyChange> unregisteredKeyChanges = new ConcurrentHashMap<>();
-    private int id = -1;
+    private volatile int id = -1;
     private AtomicInteger stepAtServer = new AtomicInteger(0);
     private final Map<Key, KeyAction> state = new ConcurrentHashMap<>();
     private Command command;
-    private TagProWorld world = new TagProWorld(1, 1);
+    private volatile TagProWorld world = new TagProWorld(1);
 
 
     public SyncService(SyncObserver observer, Executor publisherExecutor) {
@@ -99,7 +99,7 @@ public class SyncService implements GameSubscriber, Runnable {
         if (ballUpdate != null) {
             //updating self
             scheduledExecutorService.submit(() -> {
-                world.getSelf().setBodyPositionAndVelocity(ballUpdate);
+                world.getPlayer(1).setBodyPositionAndVelocity(ballUpdate);
                 world.setStep(step);
             });
         }
@@ -109,7 +109,7 @@ public class SyncService implements GameSubscriber, Runnable {
     @Override
     public void onId(int id) {
         this.id = id;
-        world = new TagProWorld(id, 1);
+        world = new TagProWorld(1);
         long initialDelay = TimeUnit.SECONDS.toNanos(1);
         scheduledExecutorService.scheduleAtFixedRate(this, initialDelay, TagProWorld.STEP_NS, TimeUnit.NANOSECONDS);
     }
@@ -132,7 +132,7 @@ public class SyncService implements GameSubscriber, Runnable {
         List<KeyChange> es = new ArrayList<>(values);
         int step = stepAtServer.incrementAndGet();
         world.proceedToStep(step);
-        PlayerState player = world.getSelf().getPlayerState();
+        PlayerState player = world.getPlayer(1).getPlayerState();
         publisherExecutor.execute(() -> {
             try {
                 observer.currentLocation(player);

@@ -11,7 +11,7 @@ public class TagProWorldTest {
 
     @Test
     public void testStep() throws Exception {
-        TagProWorld tagProWorld = new TagProWorld(1,1);
+        TagProWorld tagProWorld = new TagProWorld(1);
         Player player = tagProWorld.getPlayer(1);
         player.setKey(Key.DOWN, KeyAction.KEYDOWN);
         player.getBody().setTransform(new Vec2(0, 5.2f), 0);

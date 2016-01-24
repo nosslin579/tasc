@@ -21,13 +21,12 @@ public class TagProWorld extends World {
     public static final float D = 1 - DAMPING * DT;
     public static final int SCALE = 100;
     private volatile int worldStep = 0;
-    private final Player self;
 
 
     private final Map<Integer, Player> players = new HashMap<>(1);
 
-    public TagProWorld(Integer idSelf, int numberOfPlayers) {
-        super(new Vec2());
+    public TagProWorld(int numberOfPlayers) {
+        super(new Vec2());//no gravity
         for (int id = 1; id <= numberOfPlayers; id++) {
             Player player = new Player();
             Body ballBody = createBallBody(id);
@@ -35,11 +34,6 @@ public class TagProWorld extends World {
             player.setId(id);
             players.put(id, player);
         }
-        self = players.get(idSelf);
-    }
-
-    public Player getSelf() {
-        return self;
     }
 
     private Body createBallBody(int id) {

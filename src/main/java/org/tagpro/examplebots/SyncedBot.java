@@ -15,6 +15,7 @@ import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class SyncedBot implements GameSubscriber, SyncObserver {
@@ -29,7 +30,7 @@ public class SyncedBot implements GameSubscriber, SyncObserver {
         SyncedBot bot = new SyncedBot();
         Starter s = new Starter();
         s.addListener(new SyncService(bot, s.getExecutor()));
-        s.addListener(new MaxTime(3, TimeUnit.SECONDS));
+        s.addListener(new MaxTime(4, TimeUnit.SECONDS));
         s.addListener(bot);
         s.start();
     }
@@ -40,6 +41,10 @@ public class SyncedBot implements GameSubscriber, SyncObserver {
         if (state == GameState.ACTIVE) {
             log.info("Game active ######################################################################################################################################");
             command.key(Key.RIGHT, KeyAction.KEYDOWN);
+            Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+                command.key(Key.RIGHT, KeyAction.KEYUP);
+                command.key(Key.LEFT, KeyAction.KEYDOWN);
+            }, 2, TimeUnit.SECONDS);
         }
     }
 

@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class PingService implements Runnable, Emitter.Listener, GameSubscriber {
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -36,14 +38,9 @@ public class PingService implements Runnable, Emitter.Listener, GameSubscriber {
         scheduledExecutorService.scheduleAtFixedRate(this, 2, 2, TimeUnit.SECONDS);
     }
 
-//    @Override
-//    public void onDisconnect() {
-//        scheduledExecutorService.shutdown();
-//    }
-
     @Override
     public void run() {
-        log.info("Ping id:" + pingIdCounter++);
+        log.debug("Ping id:" + pingIdCounter++);
         try {
             final JSONObject pingObject = new JSONObject();
             pingObject.put("id", pingIdCounter);
@@ -57,7 +54,7 @@ public class PingService implements Runnable, Emitter.Listener, GameSubscriber {
 
     @Override
     public void call(Object... args) {
-        log.info("Call length:" + args.length + " args:" + Arrays.toString(args));
+        log.debug("Call length:" + args.length + " args:" + Arrays.toString(args));
         final Integer pingId = (Integer) args[0];
         final Long sent = pingSentLog.get(pingId);
         pingSentLog.remove(pingId);

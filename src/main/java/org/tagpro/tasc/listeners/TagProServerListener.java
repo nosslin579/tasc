@@ -18,7 +18,7 @@ public abstract class TagProServerListener implements Emitter.Listener {
 
     @Override
     public final void call(Object... args) {
-        log.info("Call length:" + args.length + " args:" + Arrays.toString(args));
+        log.debug("Call length:" + args.length + " args:" + Arrays.toString(args));
         publisher.getExecutor().execute(() -> {
             try {
                 event(publisher, args);

@@ -33,7 +33,7 @@ public class MaxTime implements GameSubscriber {
     public void time(int time, GameState gameState) {
         if (gameState == GameState.ACTIVE) {
             e.schedule(() -> {
-                log.error("Exit by timer:" + maxTime + " " + timeUnit);
+                log.info("Exit by timer:" + maxTime + " " + timeUnit);
                 command.disconnect();
                 System.exit(0);
             }, maxTime, timeUnit);

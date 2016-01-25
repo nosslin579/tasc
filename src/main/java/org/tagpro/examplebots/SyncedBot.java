@@ -6,23 +6,30 @@ import org.tagpro.tasc.*;
 import org.tagpro.tasc.extras.MaxTime;
 import org.tagpro.tasc.extras.SyncObserver;
 import org.tagpro.tasc.extras.SyncService;
+import org.tagpro.tasc.listeners.BallUpdate;
 import org.tagpro.tasc.listeners.GameState;
 import org.tagpro.tasc.starter.Starter;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class SyncedBot implements GameSubscriber, SyncObserver {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private Command command;
+    private Integer id;
+    private Map<Integer, PlayerState> estimateMap = new HashMap<>();
+    private DecimalFormat df = new DecimalFormat("#.##");
 
     public static void main(String[] args) throws InterruptedException, IOException, URISyntaxException {
         SyncedBot bot = new SyncedBot();
         Starter s = new Starter();
         s.addListener(new SyncService(bot, s.getExecutor()));
-        s.addListener(new MaxTime(2, TimeUnit.SECONDS));
+        s.addListener(new MaxTime(3, TimeUnit.SECONDS));
         s.addListener(bot);
         s.start();
     }
@@ -43,7 +50,33 @@ public class SyncedBot implements GameSubscriber, SyncObserver {
     }
 
     @Override
+    public void onId(int id) {
+        this.id = id;
+    }
+
+    @Override
     public void currentLocation(int step, PlayerState self) {
-        log.info("Estimating player at " + step + " " + self);
+        estimateMap.put(step, self);
+    }
+
+    @Override
+    public void onUpdate(int step, Map<Integer, Update> updates) {
+        Update self = updates.get(id);
+        if (self == null) {
+            return;
+        }
+        BallUpdate actual = self.getBallUpdate();
+        if (actual == null) {
+            return;
+        }
+        PlayerState estimate = estimateMap.get(step);
+        if (estimate == null) {
+            return;
+        }
+        String rx = df.format(estimate.getRx());
+        String ry = df.format(estimate.getRy());
+        String ly = df.format(estimate.getLy());
+        String lx = df.format(estimate.getLx());
+        log.info("Result: (actual,estimate) rx:(" + actual.getRx() + "," + rx + ") ry:(" + actual.getRy() + "," + ry + ") lx:(" + actual.getLx() + "," + lx + ") " + " ly:(" + actual.getLy() + "," + ly + ")");
     }
 }

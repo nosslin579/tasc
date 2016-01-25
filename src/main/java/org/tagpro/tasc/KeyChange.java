@@ -3,12 +3,12 @@ package org.tagpro.tasc;
 public class KeyChange {
     private final Key key;
     private final KeyAction keyAction;
-    private final int stepAtServer;
+    private final int step;
 
-    public KeyChange(Key key, KeyAction keyAction, int stepAtServer) {
+    public KeyChange(Key key, KeyAction keyAction, int step) {
         this.key = key;
         this.keyAction = keyAction;
-        this.stepAtServer = stepAtServer;
+        this.step = step;
     }
 
     public Key getKey() {
@@ -19,7 +19,7 @@ public class KeyChange {
         return keyAction;
     }
 
-    public int getStepAtServer() {
-        return stepAtServer;
+    public int getStep() {
+        return step;
     }
 }

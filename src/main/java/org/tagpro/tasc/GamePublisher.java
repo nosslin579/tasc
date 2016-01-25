@@ -84,7 +84,7 @@ public class GamePublisher {
     }
 
     public void time(int time, GameState gameState) {
-        log.info("time");
+        log.debug("time");
         for (GameSubscriber subscriber : subscribers) {
             subscriber.time(time, gameState);
         }

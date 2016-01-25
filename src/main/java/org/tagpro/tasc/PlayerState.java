@@ -2,7 +2,9 @@ package org.tagpro.tasc;
 
 import org.tagpro.tasc.listeners.BallUpdate;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PlayerState extends BallUpdate{
     private final Set<Key> pressedKeys;
@@ -20,6 +22,6 @@ public class PlayerState extends BallUpdate{
     public String toString() {
         return "PlayerState{" +
                 "pressedKeys=" + pressedKeys +
-                '}';
+                '}' + super.toString();
     }
 }

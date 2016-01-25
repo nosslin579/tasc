@@ -59,6 +59,8 @@ public class SyncService implements GameSubscriber, Runnable {
             String sep = RecordListener.SEPARATOR2;
             recordLogger.debug("o" + sep + System.nanoTime() + sep + key.getCommand() + sep + key + sep + keyAction);
         }
+
+        world.getPlayer(1).setKey(key, keyAction);
     }
 
 
@@ -77,7 +79,7 @@ public class SyncService implements GameSubscriber, Runnable {
                 log.warn("No logged step for: " + ku.getCounter());
                 return;
             }
-            int expectedStepAtServer = unregisteredKeyChange.getStepAtServer();
+            int expectedStepAtServer = unregisteredKeyChange.getStep();
             int diff = step - expectedStepAtServer;
             log.debug("Adjusting server step. Counter:" + ku.getCounter() + " Expected:" + expectedStepAtServer + " Actual:" + step + " Diff:" + diff);
             unregisteredKeyChanges.remove(ku.getCounter());
@@ -97,7 +99,7 @@ public class SyncService implements GameSubscriber, Runnable {
 
         final BallUpdate ballUpdate = update.getBallUpdate();
         if (ballUpdate != null) {
-            //updating self
+            //updating self in same thread to avoid concurrency issues
             scheduledExecutorService.submit(() -> {
                 world.getPlayer(1).setBodyPositionAndVelocity(ballUpdate);
                 world.setStep(step);
@@ -116,6 +118,7 @@ public class SyncService implements GameSubscriber, Runnable {
 
     @Override
     public void time(int time, GameState gameState) {
+        //press up five times to sync stepAtServer
         if (gameState == GameState.NOT_YET_STARTED) {
             ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory("InitialKeyPressSync"));
             for (Integer keyTime : Arrays.asList(1000, 1200, 1400, 1600, 1800, 2000)) {
@@ -127,20 +130,20 @@ public class SyncService implements GameSubscriber, Runnable {
 
     @Override
     public void run() {
-        //Because we want the possibility to make the bot single threaded.
         Collection<KeyChange> values = unregisteredKeyChanges.values();
         List<KeyChange> es = new ArrayList<>(values);
         int step = stepAtServer.incrementAndGet();
         world.proceedToStep(step);
         PlayerState player = world.getPlayer(1).getPlayerState();
-        publisherExecutor.execute(() -> {
+        //Because we want the possibility to make the bot single threaded.
+//        publisherExecutor.execute(() -> {
             try {
-                observer.currentLocation(player);
+                observer.currentLocation(step, player);
             } catch (Exception e) {
                 log.error("Error executing step:" + stepAtServer, e);
                 System.exit(1);
             }
-        });
+//        });
     }
 
 }

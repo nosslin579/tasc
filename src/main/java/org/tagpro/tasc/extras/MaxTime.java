@@ -35,6 +35,7 @@ public class MaxTime implements GameSubscriber {
             e.schedule(() -> {
                 log.error("Exit by timer:" + maxTime + " " + timeUnit);
                 command.disconnect();
+                System.exit(0);
             }, maxTime, timeUnit);
 
         }

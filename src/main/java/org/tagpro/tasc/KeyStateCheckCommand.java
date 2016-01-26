@@ -18,7 +18,7 @@ public class KeyStateCheckCommand extends Command {
         boolean changed = keyState.setKey(key, keyAction);
         if (changed) {
             super.key(key, keyAction);
-            if (keyAction.getBooleanValue() && keyState.isPushed(key.getOpposite())) {
+            if (keyAction.isPushed() && keyState.isPushed(key.getOpposite())) {
                 key(key.getOpposite(), KeyAction.KEYUP);
             }
         }

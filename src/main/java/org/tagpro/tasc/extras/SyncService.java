@@ -45,10 +45,10 @@ public class SyncService implements GameSubscriber, Runnable {
     @Override
     public void keyPressed(Key key, KeyAction keyAction, int count) {
         if (state.get(key) == keyAction) {
-            log.warn("Key at correct state, no need to send again. Key:" + key + "=" + keyAction.getBooleanValue() + " KeyState=" + state);
+            log.warn("Key at correct state, no need to send again. Key:" + key + "=" + keyAction.isPushed() + " KeyState=" + state);
         }
         int step = stepAtServer.get();
-        log.info("Sending keyaction to server. key:" + key + "=" + keyAction.getBooleanValue() + " counter:" + count + " expected step at server:" + step);
+        log.info("Sending keyaction to server. key:" + key + "=" + keyAction.isPushed() + " counter:" + count + " expected step at server:" + step);
         state.put(key, keyAction);
         if (!state.values().contains(KeyAction.KEYDOWN)) {
             log.debug("Not pressing any key");

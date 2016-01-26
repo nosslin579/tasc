@@ -12,7 +12,7 @@ public enum KeyAction {
         return name().toLowerCase();
     }
 
-    public Boolean getBooleanValue() {
+    public Boolean isPushed() {
         return booleanValue;
     }
 }

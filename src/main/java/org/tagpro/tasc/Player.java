@@ -134,7 +134,7 @@ public class Player {
 
     public void updateKeys(List<KeyUpdate> keyUpdate) {
         for (KeyUpdate k : keyUpdate) {
-            if (k.getKeyAction().getBooleanValue()) {
+            if (k.getKeyAction().isPushed()) {
                 keyState.add(k.getKey());
                 //todo update velocity
             } else {

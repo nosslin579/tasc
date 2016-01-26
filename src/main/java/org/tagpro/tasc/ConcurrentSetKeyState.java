@@ -1,6 +1,5 @@
 package org.tagpro.tasc;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -9,7 +8,7 @@ public class ConcurrentSetKeyState implements KeyState {
 
     @Override
     public boolean setKey(Key key, KeyAction keyAction) {
-        return keyAction.getBooleanValue() ? keyState.add(key) : keyState.remove(key);
+        return keyAction.isPushed() ? keyState.add(key) : keyState.remove(key);
     }
 
     @Override

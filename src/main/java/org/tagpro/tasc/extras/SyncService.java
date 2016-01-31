@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SyncService implements GameSubscriber, Runnable {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private final Logger recordLogger = LoggerFactory.getLogger(RecordListener.class);
     private final EstimateObserver observer;
     private final Estimator estimator;
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory("SyncService"));
@@ -58,11 +57,6 @@ public class SyncService implements GameSubscriber, Runnable {
             log.debug("Not pressing any key");
         }
         unregisteredKeyChanges.put(count, new KeyChange(key, keyAction, step));
-
-        if (recordLogger.isDebugEnabled()) {
-            String sep = RecordListener.SEPARATOR2;
-            recordLogger.debug("o" + sep + System.nanoTime() + sep + key.getCommand() + sep + key + sep + keyAction);
-        }
     }
 
 

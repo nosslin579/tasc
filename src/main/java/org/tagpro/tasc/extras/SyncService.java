@@ -6,9 +6,7 @@ import org.tagpro.tasc.*;
 import org.tagpro.tasc.listeners.GameState;
 import org.tagpro.tasc.listeners.KeyUpdate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -26,18 +24,12 @@ public class SyncService implements GameSubscriber, Runnable {
     private Map<Integer, KeyChange> unregisteredKeyChanges = new ConcurrentHashMap<>();
     private volatile int id = -1;
     private AtomicInteger stepAtServer = new AtomicInteger(0);
-    private final Map<Key, KeyAction> state = new ConcurrentHashMap<>();
     private Command command;
 
 
     public SyncService(EstimateObserver observer, Estimator estimator) {
         this.observer = observer;
         this.estimator = estimator;
-        state.put(Key.LEFT, KeyAction.KEYUP);
-        state.put(Key.RIGHT, KeyAction.KEYUP);
-        state.put(Key.UP, KeyAction.KEYUP);
-        state.put(Key.DOWN, KeyAction.KEYUP);
-        state.put(Key.SPACE, KeyAction.KEYUP);
     }
 
     @Override
@@ -47,15 +39,8 @@ public class SyncService implements GameSubscriber, Runnable {
 
     @Override
     public void keyPressed(Key key, KeyAction keyAction, int count) {
-        if (state.get(key) == keyAction) {
-            log.warn("Key at correct state, no need to send again. Key:" + key + "=" + keyAction.isPushed() + " KeyState=" + state);
-        }
+        //saving pressed key for sync checking
         int step = stepAtServer.get();
-        log.info("Sending keyaction to server. key:" + key + "=" + keyAction.isPushed() + " counter:" + count + " expected step at server:" + step);
-        state.put(key, keyAction);
-        if (!state.values().contains(KeyAction.KEYDOWN)) {
-            log.debug("Not pressing any key");
-        }
         unregisteredKeyChanges.put(count, new KeyChange(key, keyAction, step));
     }
 
@@ -115,9 +100,8 @@ public class SyncService implements GameSubscriber, Runnable {
 
     @Override
     public void run() {
-        List<KeyChange> es = new ArrayList<>(unregisteredKeyChanges.values());
         int step = stepAtServer.incrementAndGet();
-        PlayerState player = estimator.estimate(step, es);
+        PlayerState player = estimator.estimate(step);
         try {
             observer.currentEstimatedLocation(step, player);
         } catch (Exception e) {

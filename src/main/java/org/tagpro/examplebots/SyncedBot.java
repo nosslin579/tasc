@@ -3,6 +3,7 @@ package org.tagpro.examplebots;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.*;
+import org.tagpro.tasc.extras.Box2DEstimator;
 import org.tagpro.tasc.extras.EstimateObserver;
 import org.tagpro.tasc.extras.MaxTime;
 import org.tagpro.tasc.extras.SyncService;
@@ -27,11 +28,16 @@ public class SyncedBot implements GameSubscriber, EstimateObserver {
     private DecimalFormat df = new DecimalFormat("#.##");
 
     public static void main(String[] args) throws InterruptedException, IOException, URISyntaxException {
-        SyncedBot bot = new SyncedBot();
         Starter s = new Starter();
-        s.addListener(new SyncService(bot, s.getExecutor()));
+
+        SyncedBot bot = new SyncedBot();
+        Box2DEstimator estimator = new Box2DEstimator();
+
+        s.addListener(estimator);
+        s.addListener(new SyncService(bot, estimator));
         s.addListener(new MaxTime(4, TimeUnit.SECONDS));
         s.addListener(bot);
+
         s.start();
     }
 

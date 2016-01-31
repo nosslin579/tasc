@@ -3,12 +3,17 @@ package org.tagpro.tasc.extras;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.*;
-import org.tagpro.tasc.listeners.BallUpdate;
 import org.tagpro.tasc.listeners.GameState;
 import org.tagpro.tasc.listeners.KeyUpdate;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SyncService implements GameSubscriber, Runnable {
@@ -16,6 +21,7 @@ public class SyncService implements GameSubscriber, Runnable {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final Logger recordLogger = LoggerFactory.getLogger(RecordListener.class);
     private final EstimateObserver observer;
+    private final Estimator estimator;
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory("SyncService"));
     //Key=count, Value=KeyAction
     private Map<Integer, KeyChange> unregisteredKeyChanges = new ConcurrentHashMap<>();
@@ -23,11 +29,11 @@ public class SyncService implements GameSubscriber, Runnable {
     private AtomicInteger stepAtServer = new AtomicInteger(0);
     private final Map<Key, KeyAction> state = new ConcurrentHashMap<>();
     private Command command;
-    private volatile TagProWorld world = new TagProWorld(1);
 
 
-    public SyncService(EstimateObserver observer, Executor publisherExecutor) {
+    public SyncService(EstimateObserver observer, Estimator estimator) {
         this.observer = observer;
+        this.estimator = estimator;
         state.put(Key.LEFT, KeyAction.KEYUP);
         state.put(Key.RIGHT, KeyAction.KEYUP);
         state.put(Key.UP, KeyAction.KEYUP);
@@ -57,8 +63,6 @@ public class SyncService implements GameSubscriber, Runnable {
             String sep = RecordListener.SEPARATOR2;
             recordLogger.debug("o" + sep + System.nanoTime() + sep + key.getCommand() + sep + key + sep + keyAction);
         }
-
-        world.getPlayer(1).setKey(key, keyAction);
     }
 
 
@@ -94,22 +98,11 @@ public class SyncService implements GameSubscriber, Runnable {
             }
         }
 
-
-        final BallUpdate ballUpdate = update.getBallUpdate();
-        if (ballUpdate != null) {
-            //updating self in same thread to avoid concurrency issues
-            scheduledExecutorService.submit(() -> {
-                world.getPlayer(1).setBodyPositionAndVelocity(ballUpdate);
-                world.setStep(step);
-            });
-        }
-
     }
 
     @Override
     public void onId(int id) {
         this.id = id;
-        world = new TagProWorld(1);
         long initialDelay = TimeUnit.SECONDS.toNanos(1);
         scheduledExecutorService.scheduleAtFixedRate(this, initialDelay, TagProWorld.STEP_NS, TimeUnit.NANOSECONDS);
     }
@@ -128,11 +121,9 @@ public class SyncService implements GameSubscriber, Runnable {
 
     @Override
     public void run() {
-        Collection<KeyChange> values = unregisteredKeyChanges.values();
-        List<KeyChange> es = new ArrayList<>(values);
+        List<KeyChange> es = new ArrayList<>(unregisteredKeyChanges.values());
         int step = stepAtServer.incrementAndGet();
-        world.proceedToStep(step);
-        PlayerState player = world.getPlayer(1).getPlayerState();
+        PlayerState player = estimator.estimate(step, es);
         try {
             observer.currentEstimatedLocation(step, player);
         } catch (Exception e) {

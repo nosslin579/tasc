@@ -15,8 +15,7 @@ public class SyncService implements GameSubscriber, Runnable {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final Logger recordLogger = LoggerFactory.getLogger(RecordListener.class);
-    private final SyncObserver observer;
-    private final Executor publisherExecutor;
+    private final EstimateObserver observer;
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory("SyncService"));
     //Key=count, Value=KeyAction
     private Map<Integer, KeyChange> unregisteredKeyChanges = new ConcurrentHashMap<>();
@@ -27,9 +26,8 @@ public class SyncService implements GameSubscriber, Runnable {
     private volatile TagProWorld world = new TagProWorld(1);
 
 
-    public SyncService(SyncObserver observer, Executor publisherExecutor) {
+    public SyncService(EstimateObserver observer, Executor publisherExecutor) {
         this.observer = observer;
-        this.publisherExecutor = publisherExecutor;
         state.put(Key.LEFT, KeyAction.KEYUP);
         state.put(Key.RIGHT, KeyAction.KEYUP);
         state.put(Key.UP, KeyAction.KEYUP);
@@ -135,15 +133,12 @@ public class SyncService implements GameSubscriber, Runnable {
         int step = stepAtServer.incrementAndGet();
         world.proceedToStep(step);
         PlayerState player = world.getPlayer(1).getPlayerState();
-        //Because we want the possibility to make the bot single threaded.
-//        publisherExecutor.execute(() -> {
-            try {
-                observer.currentLocation(step, player);
-            } catch (Exception e) {
-                log.error("Error executing step:" + stepAtServer, e);
-                System.exit(1);
-            }
-//        });
+        try {
+            observer.currentEstimatedLocation(step, player);
+        } catch (Exception e) {
+            log.error("Error executing step:" + stepAtServer, e);
+            System.exit(1);
+        }
     }
 
 }

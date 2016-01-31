@@ -61,7 +61,7 @@ public enum TileType {
         this(id, description, ' ');
     }
 
-    public static TileType resolve(Number n) {
+    public static TileType resolve(Object n) {
         for (TileType t : values()) {
             if (t.id.equals(n)) {
                 return t;

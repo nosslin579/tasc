@@ -3,8 +3,8 @@ package org.tagpro.examplebots;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.*;
-import org.tagpro.tasc.extras.Box2DEstimator;
-import org.tagpro.tasc.extras.EstimateObserver;
+import org.tagpro.tasc.extras.Box2DClientSidePredictor;
+import org.tagpro.tasc.extras.ClientSidePredictionObserver;
 import org.tagpro.tasc.extras.MaxTime;
 import org.tagpro.tasc.extras.SyncService;
 import org.tagpro.tasc.listeners.BallUpdate;
@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class SyncedBot implements GameSubscriber, EstimateObserver {
+public class SyncedBot implements GameSubscriber, ClientSidePredictionObserver {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private Command command;
@@ -31,7 +31,7 @@ public class SyncedBot implements GameSubscriber, EstimateObserver {
         Starter s = new Starter();
 
         SyncedBot bot = new SyncedBot();
-        Box2DEstimator estimator = new Box2DEstimator();
+        Box2DClientSidePredictor estimator = new Box2DClientSidePredictor();
 
         s.addListener(estimator);
         s.addListener(new SyncService(bot, estimator));
@@ -66,7 +66,7 @@ public class SyncedBot implements GameSubscriber, EstimateObserver {
     }
 
     @Override
-    public void currentEstimatedLocation(int step, PlayerState self) {
+    public void predicatedLocation(int step, PlayerState self) {
         estimateMap.put(step, self);
     }
 

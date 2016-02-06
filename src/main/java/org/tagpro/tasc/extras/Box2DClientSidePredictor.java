@@ -5,13 +5,13 @@ import org.tagpro.tasc.listeners.BallUpdate;
 
 import java.util.Map;
 
-public class Box2DEstimator implements Estimator, GameSubscriber {
+public class Box2DClientSidePredictor implements ClientSidePredictor, GameSubscriber {
 
     private final TagProWorld world = new TagProWorld(1);
     private int id;
 
     @Override
-    public PlayerState estimate(int step) {
+    public PlayerState predict(int step) {
         synchronized (this) {
             world.proceedToStep(step);
             return world.getPlayer(1).getPlayerState();

@@ -17,8 +17,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SyncService implements GameSubscriber, Runnable {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private final EstimateObserver observer;
-    private final Estimator estimator;
+    private final ClientSidePredictionObserver observer;
+    private final ClientSidePredictor clientSidePredictor;
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory("SyncService"));
     //Key=count, Value=KeyAction
     private Map<Integer, KeyChange> unregisteredKeyChanges = new ConcurrentHashMap<>();
@@ -27,9 +27,9 @@ public class SyncService implements GameSubscriber, Runnable {
     private Command command;
 
 
-    public SyncService(EstimateObserver observer, Estimator estimator) {
+    public SyncService(ClientSidePredictionObserver observer, ClientSidePredictor clientSidePredictor) {
         this.observer = observer;
-        this.estimator = estimator;
+        this.clientSidePredictor = clientSidePredictor;
     }
 
     @Override
@@ -101,9 +101,9 @@ public class SyncService implements GameSubscriber, Runnable {
     @Override
     public void run() {
         int step = stepAtServer.incrementAndGet();
-        PlayerState player = estimator.estimate(step);
+        PlayerState player = clientSidePredictor.predict(step);
         try {
-            observer.currentEstimatedLocation(step, player);
+            observer.predicatedLocation(step, player);
         } catch (Exception e) {
             log.error("Error executing step:" + stepAtServer, e);
             System.exit(1);

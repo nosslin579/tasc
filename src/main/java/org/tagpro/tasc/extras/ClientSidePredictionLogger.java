@@ -3,9 +3,9 @@ package org.tagpro.tasc.extras;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.GameSubscriber;
-import org.tagpro.tasc.PlayerState;
-import org.tagpro.tasc.Update;
-import org.tagpro.tasc.listeners.BallUpdate;
+import org.tagpro.tasc.data.BallUpdate;
+import org.tagpro.tasc.data.PlayerState;
+import org.tagpro.tasc.data.Update;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;

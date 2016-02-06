@@ -2,6 +2,9 @@ package org.tagpro.tasc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tagpro.tasc.data.Team;
+import org.tagpro.tasc.data.Tile;
+import org.tagpro.tasc.data.TileType;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,5 +1,6 @@
 package org.tagpro.tasc;
 
+import org.tagpro.tasc.data.Key;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -18,7 +19,7 @@ public class KeyTest {
         Assert.assertTrue(Key.isD1RightOfD2(90, 270));
         Assert.assertFalse(Key.isD1RightOfD2(315, 5));
         Assert.assertFalse(Key.isD1RightOfD2(271, 275));
-        Assert.assertTrue(Key.isUp(275));
+        Assert.assertTrue(Key.isUp(275d));
 
         Assert.assertEquals(Key.getKeys(90, 95), Arrays.asList(Key.DOWN, Key.RIGHT));
         Assert.assertEquals(Key.getKeys(95, 94), Arrays.asList(Key.RIGHT));

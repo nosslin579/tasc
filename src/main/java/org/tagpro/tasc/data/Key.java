@@ -1,4 +1,4 @@
-package org.tagpro.tasc;
+package org.tagpro.tasc.data;
 
 import java.util.Collection;
 import java.util.TreeSet;
@@ -68,7 +68,7 @@ public enum Key {
         return degree > 90 && degree < 270;
     }
 
-    static boolean isUp(double degree) {
+    public static boolean isUp(double degree) {
         return degree < 90 || degree > 270;
     }
 

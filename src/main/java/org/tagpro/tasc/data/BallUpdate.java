@@ -1,4 +1,4 @@
-package org.tagpro.tasc.listeners;
+package org.tagpro.tasc.data;
 
 public class BallUpdate {
     private final int id;

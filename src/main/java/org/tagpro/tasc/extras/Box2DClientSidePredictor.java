@@ -1,7 +1,8 @@
 package org.tagpro.tasc.extras;
 
-import org.tagpro.tasc.*;
-import org.tagpro.tasc.listeners.BallUpdate;
+import org.tagpro.tasc.GameSubscriber;
+import org.tagpro.tasc.TagProWorld;
+import org.tagpro.tasc.data.*;
 
 import java.util.Map;
 

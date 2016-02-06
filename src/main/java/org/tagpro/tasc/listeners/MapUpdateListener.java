@@ -5,8 +5,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.GamePublisher;
-import org.tagpro.tasc.Tile;
-import org.tagpro.tasc.TileType;
+import org.tagpro.tasc.data.Tile;
+import org.tagpro.tasc.data.TileType;
 
 import java.util.Collections;
 

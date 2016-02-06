@@ -1,6 +1,6 @@
 package org.tagpro.tasc;
 
-import org.tagpro.tasc.listeners.GameState;
+import org.tagpro.tasc.data.*;
 
 import java.util.List;
 import java.util.Map;

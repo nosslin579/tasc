@@ -1,6 +1,4 @@
-package org.tagpro.tasc;
-
-import org.tagpro.tasc.listeners.BallUpdate;
+package org.tagpro.tasc.data;
 
 import java.util.Collection;
 import java.util.HashSet;

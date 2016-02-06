@@ -1,4 +1,4 @@
-package org.tagpro.tasc;
+package org.tagpro.tasc.data;
 
 public class Coordinate {
     final double x,y;

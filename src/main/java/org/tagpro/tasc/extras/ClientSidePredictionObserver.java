@@ -1,6 +1,6 @@
 package org.tagpro.tasc.extras;
 
-import org.tagpro.tasc.PlayerState;
+import org.tagpro.tasc.data.PlayerState;
 
 public interface ClientSidePredictionObserver {
 

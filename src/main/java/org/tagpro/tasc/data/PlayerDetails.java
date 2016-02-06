@@ -1,6 +1,4 @@
-package org.tagpro.tasc.listeners;
-
-import org.tagpro.tasc.Team;
+package org.tagpro.tasc.data;
 
 public class PlayerDetails {
     private final int id;

@@ -2,8 +2,13 @@ package org.tagpro.tasc.extras;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tagpro.tasc.*;
-import org.tagpro.tasc.listeners.GameState;
+import org.tagpro.tasc.Command;
+import org.tagpro.tasc.DaemonThreadFactory;
+import org.tagpro.tasc.GameSubscriber;
+import org.tagpro.tasc.data.GameState;
+import org.tagpro.tasc.data.Key;
+import org.tagpro.tasc.data.KeyAction;
+import org.tagpro.tasc.data.KeyChange;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

@@ -1,6 +1,8 @@
 package org.tagpro.tasc;
 
 import org.jbox2d.common.Vec2;
+import org.tagpro.tasc.data.Key;
+import org.tagpro.tasc.data.KeyAction;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

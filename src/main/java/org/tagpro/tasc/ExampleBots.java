@@ -1,5 +1,8 @@
 package org.tagpro.tasc;
 
+import org.tagpro.tasc.data.Key;
+import org.tagpro.tasc.data.KeyAction;
+import org.tagpro.tasc.data.KeyChange;
 import org.tagpro.tasc.extras.*;
 import org.tagpro.tasc.starter.Starter;
 

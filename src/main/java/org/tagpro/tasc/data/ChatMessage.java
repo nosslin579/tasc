@@ -1,4 +1,4 @@
-package org.tagpro.tasc.listeners;
+package org.tagpro.tasc.data;
 
 public class ChatMessage {
     private final String from;

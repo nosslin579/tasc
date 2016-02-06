@@ -1,8 +1,6 @@
-package org.tagpro.tasc;
+package org.tagpro.tasc.data;
 
 import org.json.JSONObject;
-import org.tagpro.tasc.listeners.BallUpdate;
-import org.tagpro.tasc.listeners.KeyUpdate;
 
 import java.util.List;
 

@@ -1,7 +1,4 @@
-package org.tagpro.tasc.listeners;
-
-import org.tagpro.tasc.Key;
-import org.tagpro.tasc.KeyAction;
+package org.tagpro.tasc.data;
 
 public class KeyUpdate {
     private final int id;

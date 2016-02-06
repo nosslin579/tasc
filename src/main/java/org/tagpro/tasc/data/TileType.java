@@ -1,4 +1,4 @@
-package org.tagpro.tasc;
+package org.tagpro.tasc.data;
 
 public enum TileType {
     EMPTY(0, "Empty space"),

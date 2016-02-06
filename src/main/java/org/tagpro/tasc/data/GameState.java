@@ -1,4 +1,4 @@
-package org.tagpro.tasc.listeners;
+package org.tagpro.tasc.data;
 
 public enum GameState {
     ACTIVE(1), ENDED(2), NOT_YET_STARTED(3);

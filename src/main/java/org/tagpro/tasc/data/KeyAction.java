@@ -1,4 +1,4 @@
-package org.tagpro.tasc;
+package org.tagpro.tasc.data;
 
 public enum KeyAction {
     KEYUP(false), KEYDOWN(true);

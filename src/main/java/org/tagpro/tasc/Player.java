@@ -4,8 +4,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tagpro.tasc.listeners.BallUpdate;
-import org.tagpro.tasc.listeners.KeyUpdate;
+import org.tagpro.tasc.data.*;
 
 import java.util.HashSet;
 import java.util.List;

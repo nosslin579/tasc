@@ -1,4 +1,4 @@
-package org.tagpro.tasc;
+package org.tagpro.tasc.data;
 
 public enum Team {
     BLUE(2), RED(1), SPECTATOR(3), OTHER(0);

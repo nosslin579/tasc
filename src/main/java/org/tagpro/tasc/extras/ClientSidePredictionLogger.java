@@ -8,14 +8,15 @@ import org.tagpro.tasc.data.PlayerState;
 import org.tagpro.tasc.data.Update;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientSidePredictionLogger implements GameSubscriber, ClientSidePredictionObserver {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private Integer id;
-    private Map<Integer, PlayerState> estimateMap = new HashMap<>();
+    private Map<Integer, PlayerState> estimateMap = new ConcurrentHashMap<>();
+    private int successfulPrediction = 0, failedPrediction = 0;
     private DecimalFormat df = new DecimalFormat("#.##");
 
     @Override
@@ -46,6 +47,21 @@ public class ClientSidePredictionLogger implements GameSubscriber, ClientSidePre
         String ry = df.format(estimate.getRy());
         String ly = df.format(estimate.getLy());
         String lx = df.format(estimate.getLx());
-        log.info("Result: (actual,estimate) rx:(" + actual.getRx() + "," + rx + ") ry:(" + actual.getRy() + "," + ry + ") lx:(" + actual.getLx() + "," + lx + ") " + " ly:(" + actual.getLy() + "," + ly + ")");
+        log.debug("Result: (actual,estimate) rx:(" + actual.getRx() + "," + rx + ") ry:(" + actual.getRy() + "," + ry + ") lx:(" + actual.getLx() + "," + lx + ") " + " ly:(" + actual.getLy() + "," + ly + ")");
+        compare(actual.getRx(), estimate.getRx(), "rx");
+        compare(actual.getRy(), estimate.getRy(), "ry");
+        compare(actual.getLx(), estimate.getLx(), "lx");
+        compare(actual.getLy(), estimate.getLy(), "ly");
+        estimateMap.clear();
+
+    }
+
+    private void compare(float actual, float estimate, String field) {
+        String logString = field + " estimate failed, actual:" + actual + " estimate:" + estimate;
+        if (Math.abs(actual - estimate) > 0.2) {
+            log.error(logString);
+        } else if (Math.abs(actual - estimate) > 0.02) {
+            log.warn(logString);
+        }
     }
 }

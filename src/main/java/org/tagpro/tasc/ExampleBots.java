@@ -33,13 +33,13 @@ public class ExampleBots {
         Starter s = new Starter();
 
         ClientSidePredictionLogger clientSidePredictionLogger = new ClientSidePredictionLogger();
-        Box2DClientSidePredictor estimator = new Box2DClientSidePredictor();
+        Box2DClientSidePredictor clientSidePredictor = new Box2DClientSidePredictor();
 
-        s.addListener(estimator);
-        s.addListener(new SyncService(clientSidePredictionLogger, estimator));
+        s.addListener(clientSidePredictor);
+        s.addListener(clientSidePredictionLogger);
+        s.addListener(new SyncService(clientSidePredictionLogger, clientSidePredictor));
         s.addListener(new MaxTime(4, TimeUnit.SECONDS));
         s.addListener(FixedMovement.createRightThenLeftMovement());
-        s.addListener(clientSidePredictionLogger);
 
         s.start();
     }

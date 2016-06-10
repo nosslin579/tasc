@@ -4,6 +4,7 @@ import org.tagpro.tasc.GameSubscriber;
 import org.tagpro.tasc.TagProWorld;
 import org.tagpro.tasc.data.*;
 
+import java.util.List;
 import java.util.Map;
 
 public class Box2DClientSidePredictor implements ClientSidePredictor, GameSubscriber {
@@ -17,6 +18,11 @@ public class Box2DClientSidePredictor implements ClientSidePredictor, GameSubscr
             world.proceedToStep(step);
             return world.getPlayer(1).getPlayerState();
         }
+    }
+
+    @Override
+    public void map(List<Tile> tiles) {
+        world.setMap(tiles);
     }
 
     @Override

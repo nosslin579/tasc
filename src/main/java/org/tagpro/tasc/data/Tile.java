@@ -50,10 +50,11 @@ public class Tile {
                 '}';
     }
 
-    public double getX() {
-        return mapX * 0.4;
+    public float getX() {
+        return mapX * 0.4f;
     }
-    public double getY() {
-        return mapY * 0.4;
+
+    public float getY() {
+        return mapY * 0.4f;
     }
 }

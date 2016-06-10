@@ -1,14 +1,18 @@
 package org.tagpro.tasc;
 
 import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.data.BallUpdate;
+import org.tagpro.tasc.data.Tile;
+import org.tagpro.tasc.data.TileType;
 import org.tagpro.tasc.data.Update;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -60,6 +64,21 @@ public class TagProWorld extends World {
 
         return body;
     }
+
+    public void createTile(Tile tile) {
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(.20f, .20f);
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.STATIC;
+        bodyDef.position = new Vec2(tile.getX(), tile.getY());
+        Body body = createBody(bodyDef);
+
+        final FixtureDef ballFixture = new FixtureDef();
+        ballFixture.shape = shape;
+        body.createFixture(ballFixture);
+    }
+
 
     public void proceedToStep(int step) {
         if (worldStep == 0) {
@@ -150,5 +169,13 @@ public class TagProWorld extends World {
 
     public void setStep(int step) {
         this.worldStep = step;
+    }
+
+    public void setMap(List<Tile> tiles) {
+        for (Tile tile : tiles) {
+            if (tile.getType() == TileType.WALL) {
+                createTile(tile);
+            }
+        }
     }
 }

@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
 
 public class Starter {
     private static final Logger log = LoggerFactory.getLogger(Starter.class);
+    private final String name;
 
 
     private URI serverUri = createURI("http://maptest.newcompte.fr");
@@ -27,6 +28,11 @@ public class Starter {
     private List<GameSubscriber> subscribers = new ArrayList<>();
     private TagProIdCookieCreator tagProIdCookieCreator = new HttpTagProIdCookieCreator();
     private ExecutorService executor = Executors.newSingleThreadExecutor(new DaemonThreadFactory("PublisherInternal"));
+
+    public Starter(String name) {
+        this.name = name;
+    }
+
     private URI createURI(String uri) {
         try {
             return new URI(uri);
@@ -69,7 +75,9 @@ public class Starter {
 
     public GameInfo start() throws IOException, URISyntaxException, InterruptedException {
         String tagProId = tagProIdCookieCreator.getTagProIdCookie(serverUri);
+        log.info("Got tagpro id:" + tagProId);
         URI gameURI = gameFinder.findGameURI(serverUri, tagProId);
+        log.info("Found a game:" + gameURI);
         Socket socket = createGameSocket(gameURI, tagProId);
 
 
@@ -110,6 +118,7 @@ public class Starter {
         Command command = new KeyStateCheckCommand(socket, publisher);
         publisher.init(command);
         socket.connect();
+        log.info("Starting bot:" + name);
         return new GameInfo(socket, gameURI, publisher, command);
     }
 

@@ -21,7 +21,7 @@ public class ExampleBots {
     }
 
     private static void startGoRightBotLeaveWhenDead() throws InterruptedException, IOException, URISyntaxException {
-        Starter s = new Starter();
+        Starter s = new Starter("GoRightBotLeaveWhenDead");
         s.addListener(new ExitWhenDead());
         s.addListener(new MaxTime(7, TimeUnit.SECONDS));
         s.addListener(new CommandFix());
@@ -30,7 +30,7 @@ public class ExampleBots {
     }
 
     public static void startPredictionBot() throws IOException, URISyntaxException, InterruptedException {
-        Starter s = new Starter();
+        Starter s = new Starter("PredictionBot");
 
         ClientSidePredictionLogger clientSidePredictionLogger = new ClientSidePredictionLogger();
         Box2DClientSidePredictor clientSidePredictor = new Box2DClientSidePredictor();

@@ -4,7 +4,7 @@ Tagpro Asynchronous Socket Client for Java
 
 ##What is Tasc?
 
-Tasc is a connector for the super awesome game [Tagpro](http://tagpro.koalabeast.com/)
+Tasc is a connector for the super awesome game [Tagpro](http://tagpro.koalabeast.com/) made in Java
 
 
 ##What can Tasc do?
@@ -41,7 +41,7 @@ This will run upload map test, connect, when game start right key pressed and fi
 
 Implement a class with `GameSubscriber`, start it 
 ```java
-Starter s = new Starter();
+Starter s = new Starter("TheName");
 s.addListener(new GameSubscriberImpl());
 s.start();
 ```

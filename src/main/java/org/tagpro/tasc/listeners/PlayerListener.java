@@ -35,8 +35,6 @@ public class PlayerListener extends TagProServerListener {
         final int step = updateObject.getInt("t");
         final JSONArray updateArray = updateObject.getJSONArray("u");
 
-        List<BallUpdate> ballUpdateList = new ArrayList<>();
-        List<KeyUpdate> keyUpdateList = new ArrayList<>();
 
         Map<Integer, Update> ret = new HashMap<>();
 
@@ -48,14 +46,10 @@ public class PlayerListener extends TagProServerListener {
             if (playerUpdateObject.has("rx") && playerUpdateObject.has("lx")) {
                 //{"a":0,"rx":14.69,"ry":2.92,"id":1,"lx":0.08,"ly":0.38,"ra":0}
                 ballUpdate = ballUpdate(playerUpdateObject);
-                ballUpdateList.add(ballUpdate);
 
             }
-//            if (playerUpdateObject.has("right") || playerUpdateObject.has("left") || playerUpdateObject.has("up") || playerUpdateObject.has("down")) {
             //{"t":733,"u":[{"id":1,"up":-13,"down":14}]}
             List<KeyUpdate> keyUpdate = keyUpdate(playerUpdateObject, step);
-            keyUpdateList.addAll(keyUpdate);
-//            }
             int id = playerUpdateObject.optInt("id");
             ret.put(id, new Update(id, ballUpdate, keyUpdate, playerUpdateObject));
         }

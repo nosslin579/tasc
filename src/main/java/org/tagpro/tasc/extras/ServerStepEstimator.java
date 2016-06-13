@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.Command;
 import org.tagpro.tasc.DaemonThreadFactory;
 import org.tagpro.tasc.GameSubscriber;
-import org.tagpro.tasc.TagProWorld;
+import org.tagpro.tasc.box2d.TagProWorld;
 import org.tagpro.tasc.data.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -16,11 +18,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SyncService implements GameSubscriber, Runnable {
+/**
+ * This class will estimate at which step a key will be received at server.
+ */
+public class ServerStepEstimator implements GameSubscriber, Runnable {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private final ClientSidePredictionObserver observer;
-    private final ClientSidePredictor clientSidePredictor;
+    private final List<ServerStepObserver> observers = new ArrayList<>();
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory("SyncService"));
     //Key=count, Value=KeyAction
     private Map<Integer, KeyChange> unregisteredKeyChanges = new ConcurrentHashMap<>();
@@ -28,15 +32,13 @@ public class SyncService implements GameSubscriber, Runnable {
     private AtomicInteger stepAtServer = new AtomicInteger(0);
     private Command command;
 
-
-    public SyncService(ClientSidePredictionObserver observer, ClientSidePredictor clientSidePredictor) {
-        this.observer = observer;
-        this.clientSidePredictor = clientSidePredictor;
-    }
-
     @Override
     public void init(Command command) {
         this.command = command;
+    }
+
+    public void addListener(ServerStepObserver observer) {
+        this.observers.add(observer);
     }
 
     @Override
@@ -103,13 +105,16 @@ public class SyncService implements GameSubscriber, Runnable {
     @Override
     public void run() {
         int step = stepAtServer.incrementAndGet();
-        PlayerState player = clientSidePredictor.predict(step);
-        try {
-            observer.predicatedLocation(step, player);
-        } catch (Exception e) {
-            log.error("Error executing step:" + stepAtServer, e);
-            System.exit(1);
+        for (ServerStepObserver o : observers) {
+            o.onEstimateStep(step);
         }
     }
 
+    public int getStepAtServer() {
+        return stepAtServer.get();
+    }
+
+    public interface ServerStepObserver {
+        void onEstimateStep(int step);
+    }
 }

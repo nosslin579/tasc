@@ -1,4 +1,4 @@
-package org.tagpro.tasc;
+package org.tagpro.tasc.box2d;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.PolygonShape;

@@ -1,4 +1,4 @@
-package org.tagpro.tasc;
+package org.tagpro.tasc.box2d;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;

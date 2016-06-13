@@ -1,18 +1,23 @@
-package org.tagpro.tasc.extras;
+package org.tagpro.tasc.box2d;
 
 import org.tagpro.tasc.GameSubscriber;
-import org.tagpro.tasc.TagProWorld;
 import org.tagpro.tasc.data.*;
+import org.tagpro.tasc.extras.ServerStepEstimator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Box2DClientSidePredictor implements ClientSidePredictor, GameSubscriber {
+public class Box2DClientSidePredictor implements GameSubscriber, ServerStepEstimator.ServerStepObserver {
 
     private final TagProWorld world = new TagProWorld(1);
     private int id;
+    private List<ClientSidePredictionObserver> observers = new ArrayList<>();
 
-    @Override
+    public void addListener(ClientSidePredictionObserver observer) {
+        this.observers.add(observer);
+    }
+
     public PlayerState predict(int step) {
         synchronized (this) {
             world.proceedToStep(step);
@@ -50,5 +55,17 @@ public class Box2DClientSidePredictor implements ClientSidePredictor, GameSubscr
     @Override
     public void onId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public void onEstimateStep(int step) {
+        PlayerState playerState = predict(step);
+        for (ClientSidePredictionObserver observer : observers) {
+            observer.onPredict(step, playerState);
+        }
+    }
+
+    public interface ClientSidePredictionObserver {
+        void onPredict(int step, PlayerState playerState);
     }
 }

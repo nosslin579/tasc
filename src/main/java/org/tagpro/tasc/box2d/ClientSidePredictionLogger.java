@@ -1,4 +1,4 @@
-package org.tagpro.tasc.extras;
+package org.tagpro.tasc.box2d;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ClientSidePredictionLogger implements GameSubscriber, ClientSidePredictionObserver {
+public class ClientSidePredictionLogger implements GameSubscriber, Box2DClientSidePredictor.ClientSidePredictionObserver {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private Integer id;
@@ -22,11 +22,6 @@ public class ClientSidePredictionLogger implements GameSubscriber, ClientSidePre
     @Override
     public void onId(int id) {
         this.id = id;
-    }
-
-    @Override
-    public void predicatedLocation(int step, PlayerState self) {
-        estimateMap.put(step, self);
     }
 
     @Override
@@ -63,5 +58,10 @@ public class ClientSidePredictionLogger implements GameSubscriber, ClientSidePre
         } else if (Math.abs(actual - estimate) > 0.02) {
             log.warn(logString);
         }
+    }
+
+    @Override
+    public void onPredict(int step, PlayerState playerState) {
+        estimateMap.put(step, playerState);
     }
 }

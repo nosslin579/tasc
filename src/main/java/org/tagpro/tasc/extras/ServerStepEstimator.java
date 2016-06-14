@@ -104,9 +104,15 @@ public class ServerStepEstimator implements GameSubscriber, Runnable {
 
     @Override
     public void run() {
-        int step = stepAtServer.incrementAndGet();
-        for (ServerStepObserver o : observers) {
-            o.onEstimateStep(step);
+        try {
+            int step = stepAtServer.incrementAndGet();
+            for (ServerStepObserver o : observers) {
+                o.onEstimateStep(step);
+            }
+        } catch (Exception e) {
+            log.error("Run method failed", e);
+            command.disconnect();
+            System.exit(0);
         }
     }
 

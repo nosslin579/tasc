@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/***
+ * Credit to /u/snaps_ for calculating methods. Source https://gist.github.com/chrahunt/8b6f5124f7335689f6ac
+ */
 public class TagProWorld extends World {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -139,10 +142,11 @@ public class TagProWorld extends World {
      * @return {number} - The predicted position
      */
     public static float calculatePosition(float initialVelocity, float ac, int steps) {
-
         // Expansion of \sum_{i=1}^n scale * dt * getVelocity(n)
         double sum = (D - Math.pow(D, steps + 1)) / (1 - D);
-        return (float) (SCALE * DT * (initialVelocity * sum + (ac / (1 - D)) * (D * steps - D * sum)));
+        double ret = SCALE * DT * (initialVelocity * sum + (ac / (1 - D)) * (D * steps - D * sum));
+        //not sure about /100 but it works
+        return (float) ret / 100;
     }
 
     /**
@@ -161,10 +165,17 @@ public class TagProWorld extends World {
                 throw new IllegalArgumentException("You will never reach that velocity");//null;
             }
         }
-        if (initialVelocity > targetVelocity && ac >= 0) throw new IllegalArgumentException("Todo find out why");//null;
-        if (initialVelocity < targetVelocity && ac <= 0) throw new IllegalArgumentException("Todo find out why");//null;
+        if ((initialVelocity < targetVelocity && ac <= 0) || (initialVelocity > targetVelocity && ac >= 0)) {
+            throw new IllegalArgumentException("Impossible values. InitialVel:" + initialVelocity + " TargetVel:" + targetVelocity + " Ac:" + ac);
+        }
         // Inverse of v = getVelocity(n).
         return (float) ((Math.log(targetVelocity * (1 - D) - ac * D) - Math.log(initialVelocity * (1 - D) - ac * D)) / Math.log(D));
+    }
+
+    public static int calculateStepsUntilStandStill(float initialVelocity, float acceleration) {
+        float v = Math.abs(initialVelocity);
+        float ac = Math.abs(acceleration);
+        return (int) calculateSteps(v, -ac, 0f);
     }
 
     public void setStep(int step) {
@@ -178,4 +189,5 @@ public class TagProWorld extends World {
             }
         }
     }
+
 }

@@ -1,4 +1,4 @@
-package org.tagpro.tasc;
+package org.tagpro.examples;
 
 import org.tagpro.tasc.box2d.Box2DClientSidePredictor;
 import org.tagpro.tasc.box2d.ClientSidePredictionLogger;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 
-public class ExampleBots {
+public class Bots {
     public static void main(String[] args) throws InterruptedException, IOException, URISyntaxException {
         if (args.length != 1) {
             throw new IllegalArgumentException("No bot to start");
@@ -20,7 +20,21 @@ public class ExampleBots {
             startPredictionBot();
         } else if (args[0].equals("GoRightBotLeaveWhenDead")) {
             startGoRightBotLeaveWhenDead();
+        } else if (args[0].equals("Precision")) {
+            startPrecision();
         }
+    }
+
+    private static void startPrecision() throws InterruptedException, IOException, URISyntaxException {
+        Starter s = new Starter("Precision");
+        ServerStepEstimator stepEstimator = new ServerStepEstimator();
+        Precision precision = new Precision(stepEstimator);
+
+        s.addListener(new MaxTime(60, TimeUnit.SECONDS));
+        s.addListener(new CommandFix());
+        s.addListener(stepEstimator);
+        s.addListener(precision);
+        s.start();
     }
 
     private static void startGoRightBotLeaveWhenDead() throws InterruptedException, IOException, URISyntaxException {

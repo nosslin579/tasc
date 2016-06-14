@@ -12,7 +12,7 @@ public class RecordListener implements Emitter.Listener {
 
     private final String recordEventName;
     public static final String SEPARATOR1 = "-sdfkwef1nal4viv6al8sdk9fslkd6jf4sl3d4kfew4kn4a-";
-    public static final String SEPARATOR2 = "-s----2-";
+    public static final String SEPARATOR2 = " ";
 
     public RecordListener(String recordEventName) {
         this.recordEventName = recordEventName;

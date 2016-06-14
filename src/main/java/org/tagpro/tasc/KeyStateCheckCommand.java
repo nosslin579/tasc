@@ -25,4 +25,8 @@ public class KeyStateCheckCommand extends Command {
             }
         }
     }
+
+    public boolean isPushed(Key key) {
+        return keyState.isPushed(key);
+    }
 }

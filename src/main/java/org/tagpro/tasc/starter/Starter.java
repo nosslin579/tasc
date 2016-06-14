@@ -28,6 +28,7 @@ public class Starter {
     private List<GameSubscriber> subscribers = new ArrayList<>();
     private TagProIdCookieCreator tagProIdCookieCreator = new HttpTagProIdCookieCreator();
     private ExecutorService executor = Executors.newSingleThreadExecutor(new DaemonThreadFactory("PublisherInternal"));
+    private Command command = new KeyStateCheckCommand();
 
     public Starter(String name) {
         this.name = name;
@@ -79,9 +80,10 @@ public class Starter {
         URI gameURI = gameFinder.findGameURI(serverUri, tagProId);
         log.info("Found a game:" + gameURI);
         Socket socket = createGameSocket(gameURI, tagProId);
+        command.setSocket(socket);
 
 
-        GamePublisher publisher = new GamePublisher(socket, executor);
+        GamePublisher publisher = new GamePublisher(executor);
         subscribers.add(new ExceptionHandler());
         subscribers.add(new PingService(socket));
 
@@ -115,7 +117,6 @@ public class Starter {
         }
 
         publisher.setSubscribers(subscribers);
-        Command command = new KeyStateCheckCommand(socket, publisher);
         publisher.init(command);
         socket.connect();
         log.info("Starting bot:" + name);

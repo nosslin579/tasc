@@ -1,6 +1,5 @@
 package org.tagpro.tasc;
 
-import io.socket.client.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.data.Key;
@@ -12,8 +11,8 @@ public class KeyStateCheckCommand extends Command {
 
     private KeyState keyState = new ConcurrentSetKeyState();
 
-    public KeyStateCheckCommand(Socket socket, GamePublisher publisher) {
-        super(socket, publisher);
+    public KeyStateCheckCommand() {
+        super();
     }
 
     public void key(Key key, KeyAction keyAction) {

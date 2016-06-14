@@ -1,5 +1,6 @@
 package org.tagpro.tasc.box2d;
 
+import org.tagpro.tasc.Command;
 import org.tagpro.tasc.GameSubscriber;
 import org.tagpro.tasc.data.*;
 import org.tagpro.tasc.extras.ServerStepEstimator;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Box2DClientSidePredictor implements GameSubscriber, ServerStepEstimator.ServerStepObserver {
+public class Box2DClientSidePredictor implements GameSubscriber, ServerStepEstimator.ServerStepObserver, Command.KeyObserver {
 
     private final TagProWorld world = new TagProWorld(1);
     private int id;
@@ -23,6 +24,11 @@ public class Box2DClientSidePredictor implements GameSubscriber, ServerStepEstim
             world.proceedToStep(step);
             return world.getPlayer(1).getPlayerState();
         }
+    }
+
+    @Override
+    public void init(Command command) {
+        command.addObserver(this);
     }
 
     @Override

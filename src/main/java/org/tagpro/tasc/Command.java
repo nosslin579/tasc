@@ -8,19 +8,19 @@ import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.data.Key;
 import org.tagpro.tasc.data.KeyAction;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Command {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private final Socket socket;
-    private final GamePublisher publisher;
+    private Socket socket;
     private AtomicInteger keyPressCounter = new AtomicInteger(0);
+    private List<KeyObserver> observers = new ArrayList<>();
 
-    public Command(Socket socket, GamePublisher publisher) {
-        this.socket = socket;
-        this.publisher = publisher;
+    public Command() {
     }
 
     public void key(Key key, KeyAction keyAction) {
@@ -30,7 +30,9 @@ public class Command {
             keyObject.put("t", count);
             keyObject.put("k", key.getCommand());
             socket.emit(keyAction.getCommand(), keyObject);
-            publisher.keyPressed(key, keyAction, count);
+            for (KeyObserver observer : observers) {
+                observer.keyPressed(key, keyAction, count);
+            }
         } catch (JSONException e) {
             throw new RuntimeException("Key failed", e);
         }
@@ -54,6 +56,17 @@ public class Command {
     public void disconnect() {
         log.info("Disconnecting");
         socket.disconnect();
-        publisher.disconnect();
+    }
+
+    public void addObserver(KeyObserver observer) {
+        this.observers.add(observer);
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    public interface KeyObserver {
+        void keyPressed(Key key, KeyAction keyAction, int count);
     }
 }

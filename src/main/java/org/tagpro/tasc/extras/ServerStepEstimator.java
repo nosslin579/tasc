@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * This class will estimate at which step a key will be received at server.
  */
-public class ServerStepEstimator implements GameSubscriber, Runnable {
+public class ServerStepEstimator implements GameSubscriber, Runnable, Command.KeyObserver {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final List<ServerStepObserver> observers = new ArrayList<>();
@@ -35,6 +35,7 @@ public class ServerStepEstimator implements GameSubscriber, Runnable {
     @Override
     public void init(Command command) {
         this.command = command;
+        command.addObserver(this);
     }
 
     public void addListener(ServerStepObserver observer) {

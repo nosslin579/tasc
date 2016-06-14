@@ -1,6 +1,8 @@
 package org.tagpro.tasc;
 
-import org.tagpro.tasc.data.*;
+import org.tagpro.tasc.data.GameState;
+import org.tagpro.tasc.data.Tile;
+import org.tagpro.tasc.data.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +17,8 @@ public interface GameSubscriber {
 
     /**
      * Fired each time p is sent to client
-     * @param step the current step
+     *
+     * @param step    the current step
      * @param updates Map of each player where key is id.
      */
     default void onUpdate(int step, Map<Integer, Update> updates) {
@@ -30,13 +33,7 @@ public interface GameSubscriber {
     default void map(List<Tile> tiles) {
     }
 
-    default void keyPressed(Key key, KeyAction keyAction, int count) {
-    }
-
     default void time(int time, GameState gameState) {
-    }
-
-    default void disconnect() {
     }
 
     default void banned() {

@@ -1,9 +1,10 @@
 package org.tagpro.tasc;
 
-import io.socket.client.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tagpro.tasc.data.*;
+import org.tagpro.tasc.data.GameState;
+import org.tagpro.tasc.data.Tile;
+import org.tagpro.tasc.data.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -12,13 +13,11 @@ import java.util.concurrent.Executor;
 public class GamePublisher {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private final Socket socket;
     private GameSubscriber[] subscribers;
     private final Executor internal;
 
 
-    public GamePublisher(Socket socket, Executor internal) {
-        this.socket = socket;
+    public GamePublisher(Executor internal) {
         this.internal = internal;
     }
 
@@ -94,13 +93,6 @@ public class GamePublisher {
         log.debug("map");
         for (GameSubscriber subscriber : subscribers) {
             subscriber.map(tiles);
-        }
-    }
-
-    public void keyPressed(Key key, KeyAction keyAction, int count) {
-        log.debug("keyPressed");
-        for (GameSubscriber subscriber : subscribers) {
-            subscriber.keyPressed(key, keyAction, count);
         }
     }
 

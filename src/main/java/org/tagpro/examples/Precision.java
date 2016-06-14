@@ -11,7 +11,7 @@ import org.tagpro.tasc.extras.ServerStepEstimator;
 
 import java.util.Map;
 
-public class Precision implements GameSubscriber, ServerStepEstimator.ServerStepObserver {
+public class Precision implements GameSubscriber, ServerStepEstimator.ServerStepObserver, Command.KeyObserver {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final ServerStepEstimator stepEstimator;
 
@@ -93,5 +93,6 @@ public class Precision implements GameSubscriber, ServerStepEstimator.ServerStep
     @Override
     public void init(Command command) {
         this.command = (KeyStateCheckCommand) command;
+        command.addObserver(this);
     }
 }

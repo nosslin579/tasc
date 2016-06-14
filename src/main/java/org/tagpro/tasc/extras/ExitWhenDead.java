@@ -12,8 +12,12 @@ import java.util.Map;
 public class ExitWhenDead implements GameSubscriber {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private Command command;
+    private final Command command;
     private GameState state;
+
+    public ExitWhenDead(Command command) {
+        this.command = command;
+    }
 
     @Override
     public void onUpdate(int step, Map<Integer, Update> updates) {
@@ -29,10 +33,5 @@ public class ExitWhenDead implements GameSubscriber {
     @Override
     public void time(int time, GameState state) {
         this.state = state;
-    }
-
-    @Override
-    public void init(Command command) {
-        this.command = command;
     }
 }

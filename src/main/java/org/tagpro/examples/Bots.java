@@ -27,11 +27,11 @@ public class Bots {
 
     private static void startPrecision() throws InterruptedException, IOException, URISyntaxException {
         Starter s = new Starter("Precision");
-        ServerStepEstimator stepEstimator = new ServerStepEstimator();
-        Precision precision = new Precision(stepEstimator);
+        ServerStepEstimator stepEstimator = new ServerStepEstimator(s.getCommand());
+        Precision precision = new Precision(s.getCommand(), stepEstimator);
 
-        s.addListener(new MaxTime(60, TimeUnit.SECONDS));
-        s.addListener(new CommandFix());
+        s.addListener(new MaxTime(s.getCommand(), 60, TimeUnit.SECONDS));
+        s.addListener(new CommandFix(s.getCommand()));
         s.addListener(stepEstimator);
         s.addListener(precision);
         s.start();
@@ -39,17 +39,17 @@ public class Bots {
 
     private static void startGoRightBotLeaveWhenDead() throws InterruptedException, IOException, URISyntaxException {
         Starter s = new Starter("GoRightBotLeaveWhenDead");
-        s.addListener(new ExitWhenDead());
-        s.addListener(new MaxTime(7, TimeUnit.SECONDS));
-        s.addListener(new CommandFix());
-        s.addListener(new FixedMovement(new KeyChange(Key.RIGHT, KeyAction.KEYDOWN, 0)));
+        s.addListener(new ExitWhenDead(s.getCommand()));
+        s.addListener(new MaxTime(s.getCommand(), 7, TimeUnit.SECONDS));
+        s.addListener(new CommandFix(s.getCommand()));
+        s.addListener(new FixedMovement(s.getCommand(), new KeyChange(Key.RIGHT, KeyAction.KEYDOWN, 0)));
         s.start();
     }
 
     public static void startPredictionBot() throws IOException, URISyntaxException, InterruptedException {
         Starter s = new Starter("PredictionBot");
 
-        ServerStepEstimator stepEstimator = new ServerStepEstimator();
+        ServerStepEstimator stepEstimator = new ServerStepEstimator(s.getCommand());
         Box2DClientSidePredictor clientSidePredictor = new Box2DClientSidePredictor();
         ClientSidePredictionLogger clientSidePredictionLogger = new ClientSidePredictionLogger();
 
@@ -59,8 +59,10 @@ public class Bots {
         s.addListener(clientSidePredictor);
         s.addListener(clientSidePredictionLogger);
         s.addListener(stepEstimator);
-        s.addListener(new MaxTime(4, TimeUnit.SECONDS));
-        s.addListener(FixedMovement.createRightThenLeftMovement());
+        s.addListener(new MaxTime(s.getCommand(), 4, TimeUnit.SECONDS));
+        s.addListener(FixedMovement.createRightThenLeftMovement(s.getCommand()));
+
+        s.getCommand().addObserver(clientSidePredictor);
 
         s.start();
     }

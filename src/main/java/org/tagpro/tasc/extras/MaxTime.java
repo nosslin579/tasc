@@ -13,19 +13,15 @@ import java.util.concurrent.TimeUnit;
 public class MaxTime implements GameSubscriber {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
+    private final Command command;
     private final int maxTime;
     private final TimeUnit timeUnit;
     private ScheduledExecutorService e = Executors.newSingleThreadScheduledExecutor();
-    private Command command;
 
 
-    public MaxTime(int maxTime, TimeUnit timeUnit) {
+    public MaxTime(Command command, int maxTime, TimeUnit timeUnit) {
         this.maxTime = maxTime;
         this.timeUnit = timeUnit;
-    }
-
-    @Override
-    public void init(Command command) {
         this.command = command;
     }
 

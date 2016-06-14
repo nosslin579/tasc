@@ -30,10 +30,9 @@ public class ServerStepEstimator implements GameSubscriber, Runnable, Command.Ke
     private Map<Integer, KeyChange> unregisteredKeyChanges = new ConcurrentHashMap<>();
     private volatile int id = -1;
     private AtomicInteger stepAtServer = new AtomicInteger(0);
-    private Command command;
+    private final Command command;
 
-    @Override
-    public void init(Command command) {
+    public ServerStepEstimator(Command command) {
         this.command = command;
         command.addObserver(this);
     }

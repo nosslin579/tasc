@@ -16,14 +16,16 @@ public class Precision implements GameSubscriber, ServerStepEstimator.ServerStep
     private final ServerStepEstimator stepEstimator;
 
     private int id;
-    private KeyStateCheckCommand command;
+    private final KeyStateCheckCommand command;
     private volatile BallUpdate lastUpdate;
     private volatile int lastUpdateStep;
 
     private int c = 0;
 
-    public Precision(ServerStepEstimator stepEstimator) {
+    public Precision(Command command, ServerStepEstimator stepEstimator) {
+        this.command = (KeyStateCheckCommand) command;
         this.stepEstimator = stepEstimator;
+        command.addObserver(this);
     }
 
     @Override
@@ -90,9 +92,4 @@ public class Precision implements GameSubscriber, ServerStepEstimator.ServerStep
         this.id = id;
     }
 
-    @Override
-    public void init(Command command) {
-        this.command = (KeyStateCheckCommand) command;
-        command.addObserver(this);
-    }
 }

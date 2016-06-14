@@ -12,16 +12,16 @@
     "red": [
       {
         "x": 15,
-        "y": 3,
-        "radius": 5,
+        "y": 4,
+        "radius": 2,
         "weight": 1
       }
     ],
     "blue": [
       {
         "x": 15,
-        "y": 6,
-        "radius": 5,
+        "y": 5,
+        "radius": 2,
         "weight": 1
       }
     ]

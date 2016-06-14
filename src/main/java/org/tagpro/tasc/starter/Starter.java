@@ -117,7 +117,6 @@ public class Starter {
         }
 
         publisher.setSubscribers(subscribers);
-        publisher.init(command);
         socket.connect();
         log.info("Starting bot:" + name);
         return new GameInfo(socket, gameURI, publisher, command);
@@ -138,5 +137,9 @@ public class Starter {
         socket.io().on(Manager.EVENT_TRANSPORT, new SetCookieEmitterListener(tagProId));
         addStandardEvents(socket);
         return socket;
+    }
+
+    public Command getCommand() {
+        return command;
     }
 }

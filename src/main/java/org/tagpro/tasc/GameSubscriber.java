@@ -53,7 +53,4 @@ public interface GameSubscriber {
 
     default void score(String score) {
     }
-
-    default void init(Command command) {
-    }
 }

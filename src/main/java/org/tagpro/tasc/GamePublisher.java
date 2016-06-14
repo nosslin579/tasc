@@ -119,9 +119,4 @@ public class GamePublisher {
         this.subscribers = subscribers.stream().toArray(GameSubscriber[]::new);
     }
 
-    public void init(Command command) {
-        for (GameSubscriber subscriber : subscribers) {
-            subscriber.init(command);
-        }
-    }
 }

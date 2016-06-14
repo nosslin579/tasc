@@ -14,10 +14,9 @@ import org.tagpro.tasc.data.KeyAction;
 public class CommandFix implements GameSubscriber {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private Command command;
+    private final Command command;
 
-    @Override
-    public void init(Command command) {
+    public CommandFix(Command command) {
         this.command = command;
     }
 

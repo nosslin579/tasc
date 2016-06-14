@@ -17,21 +17,15 @@ import java.util.concurrent.TimeUnit;
 public class FixedMovement implements GameSubscriber {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final KeyChange[] keyChanges;
-    private Command command;
+    private final Command command;
 
-    public FixedMovement(KeyChange... keyChanges) {
+    public FixedMovement(Command command, KeyChange... keyChanges) {
         this.keyChanges = keyChanges;
-    }
-
-    public static FixedMovement createRightThenLeftMovement() {
-        return new FixedMovement(new KeyChange(Key.RIGHT, KeyAction.KEYDOWN, 0), new KeyChange(Key.RIGHT, KeyAction.KEYUP, 3000), new KeyChange(Key.LEFT, KeyAction.KEYDOWN, 3000));
-    }
-
-
-    @Override
-    public void init(Command command) {
-        log.info("Init bot");
         this.command = command;
+    }
+
+    public static FixedMovement createRightThenLeftMovement(Command command) {
+        return new FixedMovement(command, new KeyChange(Key.RIGHT, KeyAction.KEYDOWN, 0), new KeyChange(Key.RIGHT, KeyAction.KEYUP, 3000), new KeyChange(Key.LEFT, KeyAction.KEYDOWN, 3000));
     }
 
     @Override

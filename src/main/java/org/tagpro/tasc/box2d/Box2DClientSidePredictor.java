@@ -27,11 +27,6 @@ public class Box2DClientSidePredictor implements GameSubscriber, ServerStepEstim
     }
 
     @Override
-    public void init(Command command) {
-        command.addObserver(this);
-    }
-
-    @Override
     public void map(List<Tile> tiles) {
         world.setMap(tiles);
     }

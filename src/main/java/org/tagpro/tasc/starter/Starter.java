@@ -28,7 +28,7 @@ public class Starter {
     private List<GameSubscriber> subscribers = new ArrayList<>();
     private TagProIdCookieCreator tagProIdCookieCreator = new HttpTagProIdCookieCreator();
     private ExecutorService executor = Executors.newSingleThreadExecutor(new DaemonThreadFactory("PublisherInternal"));
-    private Command command = new KeyStateCheckCommand();
+    private Command command = new Command();
 
     public Starter(String name) {
         this.name = name;

@@ -18,4 +18,9 @@ public class ConcurrentSetKeyState implements KeyState {
     public boolean isPushed(Key key) {
         return keyState.contains(key);
     }
+
+    @Override
+    public KeyAction getStateFor(Key key) {
+        return keyState.contains(key) ? KeyAction.KEYDOWN : KeyAction.KEYUP;
+    }
 }

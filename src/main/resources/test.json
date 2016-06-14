@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "TestRojale",
+    "name": "Box",
     "author": "Rojale",
     "gameMode": "normal"
   },
@@ -11,17 +11,17 @@
   "spawnPoints": {
     "red": [
       {
-        "x": 15,
-        "y": 4,
-        "radius": 2,
+        "x": 7,
+        "y": 9,
+        "radius": 5,
         "weight": 1
       }
     ],
     "blue": [
       {
-        "x": 15,
-        "y": 5,
-        "radius": 2,
+        "x": 22,
+        "y": 10,
+        "radius": 5,
         "weight": 1
       }
     ]

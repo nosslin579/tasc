@@ -27,9 +27,10 @@ public class Bots {
 
     private static void startPrecision() throws InterruptedException, IOException, URISyntaxException {
         Starter s = new Starter("Precision");
+        Controller controller = Controller.create(s.getCommand());
         ServerStepEstimator stepEstimator = new ServerStepEstimator(s.getCommand());
-        Precision precision = new Precision(s.getCommand(), stepEstimator);
 
+        Precision precision = new Precision(controller, stepEstimator);
         s.addListener(new MaxTime(s.getCommand(), 60, TimeUnit.SECONDS));
         s.addListener(new CommandFix(s.getCommand()));
         s.addListener(stepEstimator);

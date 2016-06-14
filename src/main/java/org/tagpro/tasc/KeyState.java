@@ -7,4 +7,6 @@ public interface KeyState {
     boolean setKey(Key key, KeyAction keyAction);
 
     boolean isPushed(Key key);
+
+    KeyAction getStateFor(Key key);
 }

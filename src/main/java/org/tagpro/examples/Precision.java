@@ -2,30 +2,27 @@ package org.tagpro.examples;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tagpro.tasc.Command;
 import org.tagpro.tasc.GameSubscriber;
-import org.tagpro.tasc.KeyStateCheckCommand;
 import org.tagpro.tasc.box2d.TagProWorld;
 import org.tagpro.tasc.data.*;
 import org.tagpro.tasc.extras.ServerStepEstimator;
 
 import java.util.Map;
 
-public class Precision implements GameSubscriber, ServerStepEstimator.ServerStepObserver, Command.KeyObserver {
+public class Precision implements GameSubscriber, ServerStepEstimator.ServerStepObserver {
     private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Controller controller;
     private final ServerStepEstimator stepEstimator;
 
     private int id;
-    private final KeyStateCheckCommand command;
     private volatile BallUpdate lastUpdate;
     private volatile int lastUpdateStep;
 
     private int c = 0;
 
-    public Precision(Command command, ServerStepEstimator stepEstimator) {
-        this.command = (KeyStateCheckCommand) command;
+    public Precision(Controller controller, ServerStepEstimator stepEstimator) {
+        this.controller = controller;
         this.stepEstimator = stepEstimator;
-        command.addObserver(this);
     }
 
     @Override
@@ -45,19 +42,19 @@ public class Precision implements GameSubscriber, ServerStepEstimator.ServerStep
 
 //        log.info("Ac:" + verticalAc + " LastV:" + lastUpdate.getLx() + " CurrentV:" + currentVelocity + " SUSS:" + stepsUntilStandStill);
         log.info("Ac:" + verticalAc + " CurrentP:" + currentPosition + " SUSS:" + stepsUntilStandStill + " positionIfReverse:" + positionIfReverse + " c" + c++);
-        if (lastUpdate.getLx() < -1.4f && positionIfReverse < 0.33f && command.isPushed(Key.LEFT)) {
-            command.key(Key.RIGHT, KeyAction.KEYDOWN);
+        if (lastUpdate.getLx() < -1.4f && positionIfReverse < 0.33f && controller.isPushed(Key.LEFT)) {
+            controller.key(Key.RIGHT, KeyAction.KEYDOWN);
             c = 0;
-        } else if (lastUpdate.getLx() > 1.4f && positionIfReverse > 5 && command.isPushed(Key.RIGHT)) {
-            command.key(Key.LEFT, KeyAction.KEYDOWN);
+        } else if (lastUpdate.getLx() > 1.4f && positionIfReverse > 5 && controller.isPushed(Key.RIGHT)) {
+            controller.key(Key.LEFT, KeyAction.KEYDOWN);
             c = 0;
         }
     }
 
     private float getVerticalAc() {
-        if (command.isPushed(Key.LEFT)) {
+        if (controller.isPushed(Key.LEFT)) {
             return -0.025f;
-        } else if (command.isPushed(Key.RIGHT)) {
+        } else if (controller.isPushed(Key.RIGHT)) {
             return 0.025f;
         } else {
             return 0;
@@ -77,14 +74,9 @@ public class Precision implements GameSubscriber, ServerStepEstimator.ServerStep
     @Override
     public void time(int time, GameState gameState) {
         if (gameState == GameState.ACTIVE) {
-            command.key(Key.LEFT, KeyAction.KEYDOWN);
+            controller.key(Key.LEFT, KeyAction.KEYDOWN);
             stepEstimator.addListener(this);
         }
-    }
-
-    @Override
-    public void keyPressed(Key key, KeyAction keyAction, int count) {
-        log.info("Key pressed:" + key + " " + keyAction);
     }
 
     @Override

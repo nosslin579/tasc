@@ -13,7 +13,7 @@ public class Controller implements Command.KeyObserver {
 
     private final Command command;
 
-    private final KeyState keyState = new ConcurrentSetKeyState();
+    private final ConcurrentSetKeyState keyState = new ConcurrentSetKeyState();
 
     public Controller(Command command) {
         this.command = command;

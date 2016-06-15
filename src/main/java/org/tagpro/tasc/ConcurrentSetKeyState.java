@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConcurrentSetKeyState implements KeyState {
     private Set<Key> keyState = ConcurrentHashMap.newKeySet();
 
-    @Override
     public boolean setKey(Key key, KeyAction keyAction) {
         return keyAction.isPushed() ? keyState.add(key) : keyState.remove(key);
     }

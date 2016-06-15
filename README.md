@@ -27,6 +27,9 @@ Tasc is a connector for the super awesome game [Tagpro](http://tagpro.koalabeast
 * Complete the Box2DClientSidePredictor
 * Add a GUI
 * Add a mock server for testing
+* Add group socket game finder
+* Upgrade to Tagpro Next
+* Add documentation
 
 
 ##How do I run Tasc?
@@ -39,9 +42,33 @@ This will run upload map test, connect, when game start right key pressed and fi
 
 ##How do I use Tasc?
 
-Implement a class with `GameSubscriber`, start it 
+Create a class that implements `GameSubscriber`:
+
+```java
+public class GoLeftBot implements GameSubscriber {
+    private final Command command;
+
+    public GoLeftBot(Command command) {
+        this.command = command;
+    }
+
+    @Override
+    public void time(int time, GameState state) {
+        if (state == GameState.ACTIVE) {
+          command.key(Key.LEFT, KeyAction.KEYDOWN);
+        }
+    }
+}
+```
+
+Then start it:
 ```java
 Starter s = new Starter("TheName");
-s.addListener(new GameSubscriberImpl());
+s.addListener(new GoLeftBot(s.getCommand()));
+s.addListener(new CommandFix(s.getCommand()));
 s.start();
 ```
+
+
+
+

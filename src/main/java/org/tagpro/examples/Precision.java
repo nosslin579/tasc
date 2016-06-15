@@ -3,7 +3,6 @@ package org.tagpro.examples;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.GameSubscriber;
-import org.tagpro.tasc.box2d.TagProWorld;
 import org.tagpro.tasc.data.*;
 import org.tagpro.tasc.extras.ServerStepEstimator;
 
@@ -13,6 +12,7 @@ public class Precision implements GameSubscriber, ServerStepEstimator.ServerStep
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final Controller controller;
     private final ServerStepEstimator stepEstimator;
+    private final BallPredictor ballPredictor = new EquationBallPredictor();
 
     private int id;
     private volatile BallUpdate lastUpdate;
@@ -27,37 +27,18 @@ public class Precision implements GameSubscriber, ServerStepEstimator.ServerStep
 
     @Override
     public void onEstimateStep(int step) {
-        if (lastUpdate == null) {
-            log.warn("Lastupdate is null");
-            return;
-        }
         int diffSteps = step - lastUpdateStep;
-        float verticalAc = getVerticalAc();
-        float currentVelocity = TagProWorld.calculateSpeed(lastUpdate.getLx(), verticalAc, diffSteps);
-        float currentPosition = lastUpdate.getRx() + TagProWorld.calculatePosition(lastUpdate.getLx(), verticalAc, diffSteps);
-
-
-        int stepsUntilStandStill = TagProWorld.calculateStepsUntilStandStill(currentVelocity, verticalAc);
-        float positionIfReverse = currentPosition + TagProWorld.calculatePosition(currentVelocity, -verticalAc, stepsUntilStandStill);
+        BallUpdate current = ballPredictor.predict(lastUpdate, diffSteps, controller.getKeyState(), 0.025f);
+        float positionIfReverse = ballPredictor.predictPositionAtHalt(current.getLx(), current.getRx(), 0.025f);
 
 //        log.info("Ac:" + verticalAc + " LastV:" + lastUpdate.getLx() + " CurrentV:" + currentVelocity + " SUSS:" + stepsUntilStandStill);
-        log.info("Ac:" + verticalAc + " CurrentP:" + currentPosition + " SUSS:" + stepsUntilStandStill + " positionIfReverse:" + positionIfReverse + " c" + c++);
+        log.info("CurrentP:" + current.getRx() + " positionIfReverse:" + positionIfReverse + " c" + c++);
         if (lastUpdate.getLx() < -1.4f && positionIfReverse < 0.33f && controller.isPushed(Key.LEFT)) {
             controller.key(Key.RIGHT, KeyAction.KEYDOWN);
             c = 0;
         } else if (lastUpdate.getLx() > 1.4f && positionIfReverse > 5 && controller.isPushed(Key.RIGHT)) {
             controller.key(Key.LEFT, KeyAction.KEYDOWN);
             c = 0;
-        }
-    }
-
-    private float getVerticalAc() {
-        if (controller.isPushed(Key.LEFT)) {
-            return -0.025f;
-        } else if (controller.isPushed(Key.RIGHT)) {
-            return 0.025f;
-        } else {
-            return 0;
         }
     }
 

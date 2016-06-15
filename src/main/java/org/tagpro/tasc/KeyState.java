@@ -9,4 +9,8 @@ public interface KeyState {
     boolean isPushed(Key key);
 
     KeyAction getStateFor(Key key);
+
+    float getHorizontalAcceleration(float surface);
+
+    float getVerticalAcceleration(float surface);
 }

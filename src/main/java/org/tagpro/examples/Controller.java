@@ -47,4 +47,8 @@ public class Controller implements Command.KeyObserver {
     public boolean isPushed(Key key) {
         return keyState.isPushed(key);
     }
+
+    public KeyState getKeyState() {
+        return keyState;
+    }
 }

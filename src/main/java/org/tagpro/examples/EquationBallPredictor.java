@@ -22,8 +22,15 @@ public class EquationBallPredictor implements BallPredictor {
 
     @Override
     public float predictPositionAtHalt(float currentVelocity, float currentPos, float surfaceAcceleration) {
+        int suss = calculateStepsUntilStandStill(currentVelocity, surfaceAcceleration);
+
         float acceleration = currentVelocity > 0 ? -surfaceAcceleration : surfaceAcceleration;
-        int suss = TagProWorld.calculateStepsUntilStandStill(currentVelocity, acceleration);
         return currentPos + TagProWorld.calculatePosition(currentVelocity, acceleration, suss);
+    }
+
+    private int calculateStepsUntilStandStill(float initialVelocity, float acceleration) {
+        float v = Math.abs(initialVelocity);
+        float ac = Math.abs(acceleration);
+        return (int) TagProWorld.calculateSteps(v, -ac, 0f);
     }
 }

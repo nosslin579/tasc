@@ -153,6 +153,9 @@ public class TagProWorld extends World {
      * Given an initial velocity, target velocity, and acceleration, gives
      * the number of steps necessary to reach that target velocity.
      *
+     * @param initialVelocity velocity
+     * @param ac              acceleration, must be negative number
+     * @param targetVelocity less then initialVelocity
      * @return {number} - The number of steps required to reach the
      * target velocity, or null if there was a constraint violation.
      * Likely float, use floor/ceil as appropriate.
@@ -170,12 +173,6 @@ public class TagProWorld extends World {
         }
         // Inverse of v = getVelocity(n).
         return (float) ((Math.log(targetVelocity * (1 - D) - ac * D) - Math.log(initialVelocity * (1 - D) - ac * D)) / Math.log(D));
-    }
-
-    public static int calculateStepsUntilStandStill(float initialVelocity, float acceleration) {
-        float v = Math.abs(initialVelocity);
-        float ac = Math.abs(acceleration);
-        return (int) calculateSteps(v, -ac, 0f);
     }
 
     public void setStep(int step) {

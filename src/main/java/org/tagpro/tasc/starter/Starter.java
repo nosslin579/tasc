@@ -133,7 +133,8 @@ public class Starter {
         IO.Options opts = new IO.Options();
         opts.forceNew = true;
         opts.reconnection = false;
-        final Socket socket = IO.socket(gameUri, opts);
+        //without r parameter ball is placed outside map, probably be a caching problem
+        final Socket socket = IO.socket(gameUri + "?r=" + System.nanoTime(), opts);
         socket.io().on(Manager.EVENT_TRANSPORT, new SetCookieEmitterListener(tagProId));
         addStandardEvents(socket);
         return socket;

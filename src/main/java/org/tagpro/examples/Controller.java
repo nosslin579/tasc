@@ -27,7 +27,7 @@ public class Controller implements Command.KeyObserver {
 
 
     @Override
-    public void keyPressed(Key key, KeyAction keyAction, int count) {
+    public void keyChanged(Key key, KeyAction keyAction, int count) {
         log.info("Key pressed:" + key + " " + keyAction);
         keyState.setKey(key, keyAction);
     }

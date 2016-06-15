@@ -42,7 +42,7 @@ public class ServerStepEstimator implements GameSubscriber, Runnable, Command.Ke
     }
 
     @Override
-    public void keyPressed(Key key, KeyAction keyAction, int count) {
+    public void keyChanged(Key key, KeyAction keyAction, int count) {
         //saving pressed key for sync checking
         int step = stepAtServer.get();
         unregisteredKeyChanges.put(count, new KeyChange(key, keyAction, step));

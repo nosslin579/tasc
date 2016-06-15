@@ -32,7 +32,7 @@ public class Box2DClientSidePredictor implements GameSubscriber, ServerStepEstim
     }
 
     @Override
-    public void keyPressed(Key key, KeyAction keyAction, int count) {
+    public void keyChanged(Key key, KeyAction keyAction, int count) {
         world.getPlayer(1).setKey(key, keyAction);
     }
 

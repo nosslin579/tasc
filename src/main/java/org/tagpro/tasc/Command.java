@@ -31,7 +31,7 @@ public class Command {
             keyObject.put("k", key.getCommand());
             socket.emit(keyAction.getCommand(), keyObject);
             for (KeyObserver observer : observers) {
-                observer.keyPressed(key, keyAction, count);
+                observer.keyChanged(key, keyAction, count);
             }
         } catch (JSONException e) {
             throw new RuntimeException("Key failed", e);
@@ -67,6 +67,6 @@ public class Command {
     }
 
     public interface KeyObserver {
-        void keyPressed(Key key, KeyAction keyAction, int count);
+        void keyChanged(Key key, KeyAction keyAction, int count);
     }
 }

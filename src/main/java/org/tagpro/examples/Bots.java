@@ -6,7 +6,9 @@ import org.tagpro.tasc.data.Key;
 import org.tagpro.tasc.data.KeyAction;
 import org.tagpro.tasc.data.KeyChange;
 import org.tagpro.tasc.extras.*;
+import org.tagpro.tasc.starter.GameInfo;
 import org.tagpro.tasc.starter.Starter;
+import org.tagpro.tasc.starter.StaticGameFinder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -29,13 +31,24 @@ public class Bots {
         Starter s = new Starter("Precision");
         Controller controller = Controller.create(s.getCommand());
         ServerStepEstimator stepEstimator = new ServerStepEstimator(s.getCommand());
-
         Precision precision = new Precision(controller, stepEstimator);
         s.addListener(new MaxTime(s.getCommand(), 60, TimeUnit.SECONDS));
         s.addListener(new CommandFix(s.getCommand()));
         s.addListener(stepEstimator);
         s.addListener(precision);
-        s.start();
+        GameInfo start = s.start();
+
+        Starter s2 = new Starter("Precision2");
+        Controller controller2 = Controller.create(s2.getCommand());
+        ServerStepEstimator stepEstimator2 = new ServerStepEstimator(s2.getCommand());
+        Precision precision2 = new Precision(controller2, stepEstimator2);
+        s2.addListener(new MaxTime(s2.getCommand(), 60, TimeUnit.SECONDS));
+        s2.addListener(new CommandFix(s2.getCommand()));
+        s2.addListener(stepEstimator2);
+        s2.addListener(precision2);
+        s2.setGameFinder(new StaticGameFinder(start.getGameURI()));
+        s2.start();
+
     }
 
     private static void startGoRightBotLeaveWhenDead() throws InterruptedException, IOException, URISyntaxException {

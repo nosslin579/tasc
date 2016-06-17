@@ -27,17 +27,13 @@
     <!--<logger name="org.tagpro.socketclient.Box2DWorld" level="debug"/>-->
     <!--<logger name="org.tagpro.tasc.GamePublisher" level="debug"/>-->
 
-    <!--
-    Log calls from RecordListener only. See http://logback.qos.ch/manual/configuration.html
-    Activate:   set level to DEBUG
-    Deactivate: set level to INFO
-     -->
+    <!-- Log calls from RecordListener only. See http://logback.qos.ch/manual/configuration.html -->
     <logger name="org.tagpro.tasc.RecordListener" additivity="false" level="debug">
         <appender-ref ref="SESSION_RECORDER"/>
     </logger>
 
     <root level="ALL">
-        <appender-ref ref="FILE"/>
+        <!--<appender-ref ref="FILE"/>-->
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

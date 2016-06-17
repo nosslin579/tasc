@@ -29,6 +29,7 @@ public class Starter {
     private TagProIdCookieCreator tagProIdCookieCreator = new HttpTagProIdCookieCreator();
     private ExecutorService executor = Executors.newSingleThreadExecutor(new DaemonThreadFactory("PublisherInternal"));
     private Command command = new Command();
+    private boolean recordEvents = false;
 
     public Starter(String name) {
         this.name = name;
@@ -40,6 +41,10 @@ public class Starter {
         } catch (URISyntaxException e) {
             throw new RuntimeException("Create uri failed", e);
         }
+    }
+
+    public void setRecordEvents(boolean recordEvents) {
+        this.recordEvents = recordEvents;
     }
 
     public void setTagProIdCookieCreator(TagProIdCookieCreator tagProIdCookieCreator) {
@@ -113,7 +118,7 @@ public class Starter {
                 socket.on(logListenerEvent, new RecordListener(logListenerEvent));
             }
         }
-        if (LoggerFactory.getLogger(RecordListener.class).isDebugEnabled()) {
+        if (recordEvents) {
             List<String> recordEvents = Arrays.asList("connect", "chat", "map", "mapupdate", "spawn", "p", "banned", "end", "full", "id", "score", "time");
             for (String recordEvent : recordEvents) {
                 socket.on(recordEvent, new RecordListener(recordEvent));

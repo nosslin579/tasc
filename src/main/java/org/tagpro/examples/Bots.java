@@ -24,7 +24,16 @@ public class Bots {
             startGoRightBotLeaveWhenDead();
         } else if (args[0].equals("Precision")) {
             startPrecision();
+        } else if (args[0].equals("FlagSnatcher")) {
+            startFlagSnatcher(args[0]);
         }
+    }
+
+    private static void startFlagSnatcher(String name) throws InterruptedException, IOException, URISyntaxException {
+        Starter s = new Starter(name);
+        s.addListener(new MaxTime(s.getCommand(), 60, TimeUnit.SECONDS));
+        FlagSnatcher.create(s);
+        GameInfo start = s.start();
     }
 
     private static void startPrecision() throws InterruptedException, IOException, URISyntaxException {

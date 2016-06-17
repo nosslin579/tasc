@@ -7,6 +7,7 @@ import org.tagpro.tasc.DaemonThreadFactory;
 import org.tagpro.tasc.GameSubscriber;
 import org.tagpro.tasc.box2d.TagProWorld;
 import org.tagpro.tasc.data.*;
+import org.tagpro.tasc.starter.Starter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,6 +119,12 @@ public class ServerStepEstimator implements GameSubscriber, Runnable, Command.Ke
 
     public int getStepAtServer() {
         return stepAtServer.get();
+    }
+
+    public static ServerStepEstimator create(Starter starter) {
+        ServerStepEstimator ret = new ServerStepEstimator(starter.getCommand());
+        starter.addListener(ret);
+        return ret;
     }
 
     public interface ServerStepObserver {

@@ -42,6 +42,10 @@ public class Starter {
         }
     }
 
+    public void setTagProIdCookieCreator(TagProIdCookieCreator tagProIdCookieCreator) {
+        this.tagProIdCookieCreator = tagProIdCookieCreator;
+    }
+
     public void setServerUri(URI serverUri) {
         this.serverUri = serverUri;
     }
@@ -110,7 +114,7 @@ public class Starter {
             }
         }
         if (LoggerFactory.getLogger(RecordListener.class).isDebugEnabled()) {
-            List<String> recordEvents = Arrays.asList("connect", "chat", "map", "spawn", "p", "banned", "end", "full", "id", "score", "time");
+            List<String> recordEvents = Arrays.asList("connect", "chat", "map", "mapupdate", "spawn", "p", "banned", "end", "full", "id", "score", "time");
             for (String recordEvent : recordEvents) {
                 socket.on(recordEvent, new RecordListener(recordEvent));
             }

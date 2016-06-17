@@ -55,7 +55,7 @@ public class Tiles {
 
     public Tile getFlagTile(Team team) {
         for (Tile tile : tiles) {
-            if (tile.getType() == TileType.BLUEFLAG && team == Team.BLUE || tile.getType() == TileType.RED_FLAG && team == Team.RED) {
+            if (tile.getType() == TileType.BLUE_FLAG && team == Team.BLUE || tile.getType() == TileType.RED_FLAG && team == Team.RED) {
                 return tile;
             } else if (tile.getType() == TileType.YELLOW_FLAG) {
                 return null;

@@ -26,7 +26,7 @@ public class Starter {
     private URI serverUri = createURI("http://maptest.newcompte.fr");
     private GameFinder gameFinder = new UploadMapGameFinder("test");
     private List<GameSubscriber> subscribers = new ArrayList<>();
-    private TagProIdCookieCreator tagProIdCookieCreator = new HttpTagProIdCookieCreator();
+    private TagProIdCookieProvider tagProIdCookieProvider = new PreferencesTagProIdCookieProvider();
     private ExecutorService executor = Executors.newSingleThreadExecutor(new DaemonThreadFactory("PublisherInternal"));
     private Command command = new Command();
     private boolean recordEvents = false;
@@ -47,8 +47,8 @@ public class Starter {
         this.recordEvents = recordEvents;
     }
 
-    public void setTagProIdCookieCreator(TagProIdCookieCreator tagProIdCookieCreator) {
-        this.tagProIdCookieCreator = tagProIdCookieCreator;
+    public void setTagProIdCookieProvider(TagProIdCookieProvider tagProIdCookieProvider) {
+        this.tagProIdCookieProvider = tagProIdCookieProvider;
     }
 
     public void setServerUri(URI serverUri) {
@@ -84,7 +84,7 @@ public class Starter {
     }
 
     public GameInfo start() throws IOException, URISyntaxException, InterruptedException {
-        String tagProId = tagProIdCookieCreator.getTagProIdCookie(serverUri);
+        String tagProId = tagProIdCookieProvider.getTagProIdCookie(this);
         log.info("Got tagpro id:" + tagProId);
         URI gameURI = gameFinder.findGameURI(serverUri, tagProId);
         log.info("Found a game:" + gameURI);
@@ -151,5 +151,9 @@ public class Starter {
 
     public Command getCommand() {
         return command;
+    }
+
+    public String getName() {
+        return name;
     }
 }

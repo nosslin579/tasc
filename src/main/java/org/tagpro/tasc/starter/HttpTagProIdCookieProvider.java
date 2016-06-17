@@ -10,18 +10,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
-public class HttpTagProIdCookieCreator implements TagProIdCookieCreator {
+public class HttpTagProIdCookieProvider implements TagProIdCookieProvider {
     private static final Logger log = LoggerFactory.getLogger(Starter.class);
 
     @Override
-    public String getTagProIdCookie(URI server) {
+    public String getTagProIdCookie(Starter starter) {
         try {
             CloseableHttpClient httpclient = HttpClients.createDefault();
-            HttpGet request = new HttpGet(server);
+            HttpGet request = new HttpGet(starter.getServerUri());
             HttpResponse response = httpclient.execute(request);
             final Header setCookieHeaders = response.getFirstHeader("Set-Cookie");
 

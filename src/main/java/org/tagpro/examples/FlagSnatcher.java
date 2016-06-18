@@ -36,6 +36,8 @@ public class FlagSnatcher implements GameSubscriber {
         FlagSnatcher ret = new FlagSnatcher(controller, stepEstimator);
         starter.addListener(ret);
         starter.addListener(new CommandFix(starter.getCommand()));
+        starter.addListener(Gui.create(starter));
+        starter.setRecordEvents(true);
         return ret;
     }
 

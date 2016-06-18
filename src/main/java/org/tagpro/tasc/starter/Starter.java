@@ -126,6 +126,7 @@ public class Starter {
         }
 
         publisher.setSubscribers(subscribers);
+        publisher.preConnect();
         socket.connect();
         log.info("Starting bot:" + name);
         return new GameInfo(socket, gameURI, publisher, command);

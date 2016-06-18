@@ -119,4 +119,9 @@ public class GamePublisher {
         this.subscribers = subscribers.stream().toArray(GameSubscriber[]::new);
     }
 
+    public void preConnect() {
+        for (GameSubscriber subscriber : subscribers) {
+            subscriber.onPreConnect();
+        }
+    }
 }

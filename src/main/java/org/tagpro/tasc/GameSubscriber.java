@@ -56,4 +56,7 @@ public interface GameSubscriber {
 
     default void onPreConnect() {
     }
+
+    default void onMapUpdate(Tile tile) {
+    }
 }

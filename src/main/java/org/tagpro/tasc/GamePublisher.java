@@ -124,4 +124,10 @@ public class GamePublisher {
             subscriber.onPreConnect();
         }
     }
+
+    public void mapUpdate(Tile tile) {
+        for (GameSubscriber subscriber : subscribers) {
+            subscriber.onMapUpdate(tile);
+        }
+    }
 }

@@ -57,19 +57,19 @@ public class FlagSnatcher implements GameSubscriber {
         }
     }
 
+    @Override
+    public void onMapUpdate(Tile tile) {
+        log.info("Map update" + tile);
+        TileType type = tile.getType();
+        if (type == TileType.BLUE_FLAG_TAKEN || type == TileType.RED_FLAG) {
+            goToRedFlag = true;
+        } else if (type == TileType.RED_FLAG_TAKEN || type == TileType.BLUE_FLAG) {
+            goToRedFlag = false;
+        }
+    }
 
     @Override
     public void map(List<Tile> tiles) {
-        if (tiles.size() == 1) {
-            log.info("Map update" + tiles);
-            TileType type = tiles.get(0).getType();
-            if (type == TileType.BLUE_FLAG_TAKEN || type == TileType.RED_FLAG) {
-                goToRedFlag = true;
-            } else if (type == TileType.RED_FLAG_TAKEN || type == TileType.BLUE_FLAG) {
-                goToRedFlag = false;
-            }
-            return;
-        }
         for (Tile tile : tiles) {
             if (tile.getType() == TileType.BLUE_FLAG) {
                 this.blueFlag = tile;

@@ -8,8 +8,6 @@ import org.tagpro.tasc.GamePublisher;
 import org.tagpro.tasc.data.Tile;
 import org.tagpro.tasc.data.TileType;
 
-import java.util.Collections;
-
 public class MapUpdateListener extends TagProServerListener {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -26,7 +24,7 @@ public class MapUpdateListener extends TagProServerListener {
             final int x = jsonTile.getInt("x");
             final int y = jsonTile.getInt("y");
             final Object tileId = jsonTile.get("v");
-            publisher.map(Collections.singletonList(new Tile(x, y, TileType.resolve(tileId))));
+            publisher.mapUpdate(new Tile(x, y, TileType.resolve(tileId)));
         }
     }
 

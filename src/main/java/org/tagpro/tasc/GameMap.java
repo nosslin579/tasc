@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Tiles {
+public class GameMap {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 

@@ -1,8 +1,8 @@
 package org.tagpro.tasc.extras;
 
 import org.json.JSONObject;
+import org.tagpro.tasc.GameMap;
 import org.tagpro.tasc.GameSubscriber;
-import org.tagpro.tasc.Tiles;
 import org.tagpro.tasc.data.*;
 import org.tagpro.tasc.starter.Starter;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 public class GameStateService implements GameSubscriber {
     private volatile boolean connected = false;
     private int id = -1;
-    private Tiles map = new Tiles();
+    private GameMap map = new GameMap();
     private GameState gameState = GameState.UNKNOWN;
     private PlayerAttribute[] playerAttribute = new PlayerAttribute[9];
 
@@ -93,7 +93,7 @@ public class GameStateService implements GameSubscriber {
         return id;
     }
 
-    public Tiles getMap() {
+    public GameMap getMap() {
         return map;
     }
 

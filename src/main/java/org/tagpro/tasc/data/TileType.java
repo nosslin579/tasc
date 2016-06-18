@@ -52,12 +52,12 @@ public enum TileType {
 
     private final static Logger log = LoggerFactory.getLogger(TileType.class);
 
-    private final Object id;
+    private final String id;
     private final String description;
     private char symbol;
 
     TileType(Object id, String description, char symbol) {
-        this.id = id;
+        this.id = id.toString();
         this.description = description;
         this.symbol = symbol;
     }
@@ -67,8 +67,9 @@ public enum TileType {
     }
 
     public static TileType resolve(Object n) {
+        String s = n.toString();
         for (TileType t : values()) {
-            if (t.id.equals(n)) {
+            if (t.id.equals(s)) {
                 return t;
             }
         }

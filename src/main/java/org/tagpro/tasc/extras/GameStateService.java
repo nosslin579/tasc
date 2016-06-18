@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class GameStateService implements GameSubscriber {
     private volatile boolean connected = false;
-    private int id = -1;
+    private Integer id = null;
     private GameMap map = new GameMap();
     private GameState gameState = GameState.UNKNOWN;
     private PlayerAttribute[] playerAttribute = new PlayerAttribute[9];
@@ -75,7 +75,7 @@ public class GameStateService implements GameSubscriber {
                 pa.setName(jsonObject.optString("name"));
             }
             if (jsonObject.has("flag")) {
-                Object flag = jsonObject.opt("flag");
+                Object flag = jsonObject.optJSONObject("flag");
                 pa.setFlag(Flag.resolve(flag));
             }
             if (jsonObject.has("team")) {
@@ -89,7 +89,7 @@ public class GameStateService implements GameSubscriber {
         return connected;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

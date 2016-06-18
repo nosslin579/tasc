@@ -8,6 +8,7 @@ import org.tagpro.tasc.data.Tile;
 import org.tagpro.tasc.data.TileType;
 import org.tagpro.tasc.data.Update;
 import org.tagpro.tasc.extras.CommandFix;
+import org.tagpro.tasc.extras.GameStateService;
 import org.tagpro.tasc.extras.ServerStepEstimator;
 import org.tagpro.tasc.starter.Starter;
 
@@ -19,21 +20,23 @@ public class FlagSnatcher implements GameSubscriber {
     private final BallPredictor ballPredictor = new EquationBallPredictor();
     private final Controller controller;
     private final ServerStepEstimator stepEstimator;
-    private int id;
+    private final GameStateService gameStateService;
     private Tile blueFlag;
     private Tile redFlag;
     private boolean goToRedFlag = true;
-    private boolean gameStarted = false;
 
-    public FlagSnatcher(Controller controller, ServerStepEstimator stepEstimator) {
+    public FlagSnatcher(Controller controller, ServerStepEstimator stepEstimator, GameStateService gameStateService) {
         this.controller = controller;
         this.stepEstimator = stepEstimator;
+        this.gameStateService = gameStateService;
     }
 
     public static FlagSnatcher create(Starter starter) {
+        GameStateService gameSubscriber = GameStateService.create(starter);
         ServerStepEstimator stepEstimator = ServerStepEstimator.create(starter);
         Controller controller = Controller.create(starter.getCommand());
-        FlagSnatcher ret = new FlagSnatcher(controller, stepEstimator);
+
+        FlagSnatcher ret = new FlagSnatcher(controller, stepEstimator, gameSubscriber);
         starter.addListener(ret);
         starter.addListener(new CommandFix(starter.getCommand()));
         starter.addListener(Gui.create(starter));
@@ -43,17 +46,10 @@ public class FlagSnatcher implements GameSubscriber {
 
     @Override
     public void onUpdate(int step, Map<Integer, Update> updates) {
-        Update self = updates.get(id);
-        if (self != null && self.getBallUpdate() != null && gameStarted) {
+        Update self = updates.get(gameStateService.getId());
+        if (self != null && self.getBallUpdate() != null && gameStateService.getGameState() == GameState.ACTIVE) {
             Tile flag = goToRedFlag ? redFlag : blueFlag;
             controller.goTo(flag, self.getBallUpdate());
-        }
-    }
-
-    @Override
-    public void time(int time, GameState gameState) {
-        if (gameState == GameState.ACTIVE) {
-            this.gameStarted = true;
         }
     }
 
@@ -77,10 +73,5 @@ public class FlagSnatcher implements GameSubscriber {
                 this.redFlag = tile;
             }
         }
-    }
-
-    @Override
-    public void onId(int id) {
-        this.id = id;
     }
 }

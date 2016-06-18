@@ -1,7 +1,7 @@
 package org.tagpro.tasc.data;
 
 public enum GameState {
-    ACTIVE(1), ENDED(2), NOT_YET_STARTED(3);
+    UNKNOWN(0), ACTIVE(1), ENDED(2), NOT_YET_STARTED(3);
     private final int stateId;
 
     GameState(int stateId) {

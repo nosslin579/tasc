@@ -7,6 +7,7 @@ import org.tagpro.tasc.data.Tile;
 import org.tagpro.tasc.data.TileType;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Tiles {
@@ -43,14 +44,11 @@ public class Tiles {
         log.debug(ret);
     }
 
-    public Tile setTile(int x, int y, Object tileId) {
-        final TileType tileType = TileType.resolve(tileId);
-        if (tileType == TileType.UNKNOWN) {
-            log.error("Unknown tile :" + tileId);
+    public void setTile(Tile tile) {
+        boolean didNotContainTile = tiles.add(tile);
+        if (didNotContainTile) {
+            log.warn("A new tile was added:" + tile);
         }
-        final Tile ret = new Tile(x, y, tileType);
-        tiles.add(ret);
-        return ret;
     }
 
     public Tile getFlagTile(Team team) {
@@ -62,6 +60,11 @@ public class Tiles {
             }
         }
         return null;
+    }
+
+    public void setTiles(List<Tile> tiles) {
+        this.tiles.clear();
+        this.tiles.addAll(tiles);
     }
 }
 

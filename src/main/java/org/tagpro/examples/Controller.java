@@ -38,7 +38,7 @@ public class Controller implements Command.KeyObserver {
 
     public void key(Key key, KeyAction keyAction) {
         if (keyState.getStateFor(key) == keyAction) {
-            log.warn("Key already at state. " + key + "=" + keyAction);
+            log.debug("Key already at state. " + key + "=" + keyAction);
         } else {
             if (keyAction == KeyAction.KEYDOWN && keyState.getStateFor(key.getOpposite()) == KeyAction.KEYDOWN) {
                 //release opposite key

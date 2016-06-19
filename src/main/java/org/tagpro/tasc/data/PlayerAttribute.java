@@ -5,7 +5,7 @@ public class PlayerAttribute {
     private Flag flag = Flag.NONE;
     private boolean bomb = false;
     private String name = "";
-    private Team team = null;
+    private Team team = Team.OTHER;
 
     public void setDead(boolean dead) {
         this.dead = dead;
@@ -45,5 +45,20 @@ public class PlayerAttribute {
 
     public Team getTeam() {
         return team;
+    }
+
+    public boolean hasFlag() {
+        return flag == Flag.RED || flag == Flag.BLUE;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerAttribute{" +
+                "dead=" + dead +
+                ", flag=" + flag +
+                ", bomb=" + bomb +
+                ", name='" + name + '\'' +
+                ", team=" + team +
+                '}';
     }
 }

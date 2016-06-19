@@ -1,6 +1,8 @@
 package org.tagpro.tasc.extras;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.GameMap;
 import org.tagpro.tasc.GameSubscriber;
 import org.tagpro.tasc.data.*;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public class GameStateService implements GameSubscriber {
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     private volatile boolean connected = false;
     private Integer id = null;
     private GameMap map = new GameMap();
@@ -74,13 +78,13 @@ public class GameStateService implements GameSubscriber {
             if (jsonObject.has("name")) {
                 pa.setName(jsonObject.optString("name"));
             }
-            if (jsonObject.has("flag")) {
-                Object flag = jsonObject.optJSONObject("flag");
-                pa.setFlag(Flag.resolve(flag));
-            }
             if (jsonObject.has("team")) {
                 int team = jsonObject.optInt("team");
                 pa.setTeam(Team.resolve(team));
+            }
+            if (jsonObject.has("flag")) {
+                Object flag = jsonObject.optJSONObject("flag");
+                pa.setFlag(Flag.resolve(flag));
             }
         }
     }
@@ -103,5 +107,18 @@ public class GameStateService implements GameSubscriber {
 
     public PlayerAttribute[] getPlayerAttribute() {
         return playerAttribute;
+    }
+
+    public PlayerAttribute getSelfPlayerAttribute() {
+        return playerAttribute[id];
+    }
+
+    public boolean hasAnyTeamMemberOppositeFlag() {
+        for (PlayerAttribute p : playerAttribute) {
+            if (p.hasFlag() && p.getTeam() == getSelfPlayerAttribute().getTeam()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

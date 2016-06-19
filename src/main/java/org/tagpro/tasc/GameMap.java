@@ -66,5 +66,14 @@ public class GameMap {
         this.tiles.clear();
         this.tiles.addAll(tiles);
     }
+
+    public Tile getTile(TileType tileType) {
+        for (Tile tile : tiles) {
+            if (tile.getType() == tileType) {
+                return tile;
+            }
+        }
+        return null;
+    }
 }
 

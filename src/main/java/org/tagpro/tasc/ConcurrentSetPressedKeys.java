@@ -1,16 +1,16 @@
 package org.tagpro.tasc;
 
 import org.tagpro.tasc.data.Key;
-import org.tagpro.tasc.data.KeyAction;
+import org.tagpro.tasc.data.KeyState;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ConcurrentSetKeyState implements KeyState {
+public class ConcurrentSetPressedKeys implements PressedKeys {
     private Set<Key> keyState = ConcurrentHashMap.newKeySet();
 
-    public boolean setKey(Key key, KeyAction keyAction) {
-        return keyAction.isPushed() ? keyState.add(key) : keyState.remove(key);
+    public boolean setKey(Key key, KeyState keyState) {
+        return keyState.isPushed() ? this.keyState.add(key) : this.keyState.remove(key);
     }
 
     @Override
@@ -19,8 +19,8 @@ public class ConcurrentSetKeyState implements KeyState {
     }
 
     @Override
-    public KeyAction getStateFor(Key key) {
-        return keyState.contains(key) ? KeyAction.KEYDOWN : KeyAction.KEYUP;
+    public KeyState getStateFor(Key key) {
+        return keyState.contains(key) ? KeyState.KEYDOWN : KeyState.KEYUP;
     }
 
     @Override

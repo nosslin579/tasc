@@ -4,7 +4,7 @@ import org.jbox2d.common.Vec2;
 import org.tagpro.tasc.box2d.Player;
 import org.tagpro.tasc.box2d.TagProWorld;
 import org.tagpro.tasc.data.Key;
-import org.tagpro.tasc.data.KeyAction;
+import org.tagpro.tasc.data.KeyState;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -40,7 +40,7 @@ public class TagProWorldTest {
     public void testStep() throws Exception {
         TagProWorld tagProWorld = new TagProWorld(1);
         Player player = tagProWorld.getPlayer(1);
-        player.setKey(Key.RIGHT, KeyAction.KEYDOWN);
+        player.setKey(Key.RIGHT, KeyState.KEYDOWN);
         player.getBody().setTransform(new Vec2(2f, 0f), 0);
         player.updateVelocity();
         tagProWorld.setStep(619);

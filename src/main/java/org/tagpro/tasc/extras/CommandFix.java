@@ -6,7 +6,7 @@ import org.tagpro.tasc.Command;
 import org.tagpro.tasc.GameSubscriber;
 import org.tagpro.tasc.data.GameState;
 import org.tagpro.tasc.data.Key;
-import org.tagpro.tasc.data.KeyAction;
+import org.tagpro.tasc.data.KeyState;
 
 /**
  * The first key press never reach server for unknown reasons. This listener will send space key to circumvent that.
@@ -23,7 +23,7 @@ public class CommandFix implements GameSubscriber {
     @Override
     public void time(int time, GameState gameState) {
         if (gameState == GameState.NOT_YET_STARTED) {
-            command.key(Key.SPACE, KeyAction.KEYDOWN);
+            command.key(Key.SPACE, KeyState.KEYDOWN);
         }
     }
 }

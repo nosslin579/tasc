@@ -64,9 +64,9 @@ public class Player {
         return keyState.contains(Key.DOWN);
     }
 
-    public void setKey(Key key, KeyAction keyAction) {
-        if (keyAction == KeyAction.KEYDOWN) {
-            keyState.add(key);
+    public void setKey(Key key, KeyState keyState) {
+        if (keyState == KeyState.KEYDOWN) {
+            this.keyState.add(key);
             float x = body.getLinearVelocity().x;
             float y = body.getLinearVelocity().y;
 
@@ -84,7 +84,7 @@ public class Player {
             }
             body.setLinearVelocity(new Vec2(x, y));
         } else {
-            keyState.remove(key);
+            this.keyState.remove(key);
         }
     }
 
@@ -133,7 +133,7 @@ public class Player {
 
     public void updateKeys(List<KeyUpdate> keyUpdate) {
         for (KeyUpdate k : keyUpdate) {
-            if (k.getKeyAction().isPushed()) {
+            if (k.getKeyState().isPushed()) {
                 keyState.add(k.getKey());
                 //todo update velocity
             } else {

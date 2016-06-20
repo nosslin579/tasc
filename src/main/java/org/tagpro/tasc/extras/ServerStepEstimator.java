@@ -43,10 +43,10 @@ public class ServerStepEstimator implements GameSubscriber, Runnable, Command.Ke
     }
 
     @Override
-    public void keyChanged(Key key, KeyAction keyAction, int count) {
+    public void keyChanged(Key key, KeyState keyState, int count) {
         //saving pressed key for sync checking
         int step = stepAtServer.get();
-        unregisteredKeyChanges.put(count, new KeyChange(key, keyAction, step));
+        unregisteredKeyChanges.put(count, new KeyChange(key, keyState, step));
     }
 
 
@@ -97,8 +97,8 @@ public class ServerStepEstimator implements GameSubscriber, Runnable, Command.Ke
         if (gameState == GameState.NOT_YET_STARTED) {
             ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory("InitialKeyPressSync"));
             for (Integer keyTime : Arrays.asList(1000, 1200, 1400, 1600, 1800, 2000)) {
-                executor.schedule(() -> command.key(Key.UP, KeyAction.KEYDOWN), keyTime, TimeUnit.MILLISECONDS);
-                executor.schedule(() -> command.key(Key.UP, KeyAction.KEYUP), keyTime + 100, TimeUnit.MILLISECONDS);
+                executor.schedule(() -> command.key(Key.UP, KeyState.KEYDOWN), keyTime, TimeUnit.MILLISECONDS);
+                executor.schedule(() -> command.key(Key.UP, KeyState.KEYUP), keyTime + 100, TimeUnit.MILLISECONDS);
             }
         }
     }

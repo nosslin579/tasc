@@ -3,13 +3,13 @@ package org.tagpro.tasc.data;
 public class KeyUpdate {
     private final int id;
     private final Key key;
-    private final KeyAction keyAction;
+    private final KeyState keyState;
     private final int counter;
 
-    public KeyUpdate(int id, Key key, KeyAction keyAction, int counter) {
+    public KeyUpdate(int id, Key key, KeyState keyState, int counter) {
         this.id = id;
         this.key = key;
-        this.keyAction = keyAction;
+        this.keyState = keyState;
         this.counter = counter;
     }
 
@@ -21,8 +21,8 @@ public class KeyUpdate {
         return key;
     }
 
-    public KeyAction getKeyAction() {
-        return keyAction;
+    public KeyState getKeyState() {
+        return keyState;
     }
 
     public int getCounter() {

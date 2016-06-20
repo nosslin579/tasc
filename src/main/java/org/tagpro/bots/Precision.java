@@ -34,10 +34,10 @@ public class Precision implements GameSubscriber, ServerStepEstimator.ServerStep
 //        log.info("Ac:" + verticalAc + " LastV:" + lastUpdate.getLx() + " CurrentV:" + currentVelocity + " SUSS:" + stepsUntilStandStill);
         log.info("CurrentP:" + current.getRx() + " positionIfReverse:" + positionIfReverse + " c" + c++);
         if (lastUpdate.getLx() < -1.4f && positionIfReverse < 0.33f && controller.isPushed(Key.LEFT)) {
-            controller.key(Key.RIGHT, KeyAction.KEYDOWN);
+            controller.key(Key.RIGHT, KeyState.KEYDOWN);
             c = 0;
         } else if (lastUpdate.getLx() > 1.4f && positionIfReverse > 5 && controller.isPushed(Key.RIGHT)) {
-            controller.key(Key.LEFT, KeyAction.KEYDOWN);
+            controller.key(Key.LEFT, KeyState.KEYDOWN);
             c = 0;
         }
     }
@@ -55,7 +55,7 @@ public class Precision implements GameSubscriber, ServerStepEstimator.ServerStep
     @Override
     public void time(int time, GameState gameState) {
         if (gameState == GameState.ACTIVE) {
-            controller.key(Key.LEFT, KeyAction.KEYDOWN);
+            controller.key(Key.LEFT, KeyState.KEYDOWN);
             stepEstimator.addListener(this);
         }
     }

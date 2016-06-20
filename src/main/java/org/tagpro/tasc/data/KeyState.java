@@ -1,10 +1,10 @@
 package org.tagpro.tasc.data;
 
-public enum KeyAction {
+public enum KeyState {
     KEYUP(false), KEYDOWN(true);
     private final boolean booleanValue;
 
-    KeyAction(boolean booleanValue) {
+    KeyState(boolean booleanValue) {
         this.booleanValue = booleanValue;
     }
 

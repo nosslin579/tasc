@@ -7,8 +7,8 @@ import org.tagpro.tasc.DaemonThreadFactory;
 import org.tagpro.tasc.GameSubscriber;
 import org.tagpro.tasc.data.GameState;
 import org.tagpro.tasc.data.Key;
-import org.tagpro.tasc.data.KeyAction;
 import org.tagpro.tasc.data.KeyChange;
+import org.tagpro.tasc.data.KeyState;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -25,7 +25,7 @@ public class FixedMovement implements GameSubscriber {
     }
 
     public static FixedMovement createRightThenLeftMovement(Command command) {
-        return new FixedMovement(command, new KeyChange(Key.RIGHT, KeyAction.KEYDOWN, 0), new KeyChange(Key.RIGHT, KeyAction.KEYUP, 3000), new KeyChange(Key.LEFT, KeyAction.KEYDOWN, 3000));
+        return new FixedMovement(command, new KeyChange(Key.RIGHT, KeyState.KEYDOWN, 0), new KeyChange(Key.RIGHT, KeyState.KEYUP, 3000), new KeyChange(Key.LEFT, KeyState.KEYDOWN, 3000));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class FixedMovement implements GameSubscriber {
             log.info("Game active ######################################################################################################################################");
             ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory(getClass().getSimpleName()));
             for (KeyChange integerKeyEntry : keyChanges) {
-                executor.schedule(() -> command.key(integerKeyEntry.getKey(), integerKeyEntry.getKeyAction()), integerKeyEntry.getStep(), TimeUnit.MILLISECONDS);
+                executor.schedule(() -> command.key(integerKeyEntry.getKey(), integerKeyEntry.getKeyState()), integerKeyEntry.getStep(), TimeUnit.MILLISECONDS);
             }
         }
     }

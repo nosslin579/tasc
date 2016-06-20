@@ -6,7 +6,7 @@ import org.tagpro.tasc.Command;
 import org.tagpro.tasc.GameSubscriber;
 import org.tagpro.tasc.data.GameState;
 import org.tagpro.tasc.data.Key;
-import org.tagpro.tasc.data.KeyAction;
+import org.tagpro.tasc.data.KeyState;
 import org.tagpro.tasc.extras.CommandFix;
 import org.tagpro.tasc.extras.ExitWhenDead;
 import org.tagpro.tasc.extras.MaxTime;
@@ -28,7 +28,7 @@ public class GoRightBot implements GameSubscriber {
     public void time(int time, GameState state) {
         if (state == GameState.ACTIVE) {
             log.info("Game active ########################################################################");
-            command.key(Key.RIGHT, KeyAction.KEYDOWN);
+            command.key(Key.RIGHT, KeyState.KEYDOWN);
         }
     }
 

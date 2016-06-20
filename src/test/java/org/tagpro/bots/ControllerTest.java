@@ -2,7 +2,7 @@ package org.tagpro.bots;
 
 import org.tagpro.tasc.data.BallUpdate;
 import org.tagpro.tasc.data.Key;
-import org.tagpro.tasc.data.KeyAction;
+import org.tagpro.tasc.data.KeyState;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -15,9 +15,9 @@ public class ControllerTest {
     public void testGoToLeftFromStandstill() throws Exception {
         MockController c = new MockController();
         c.goTo(1f, 1f, new BallUpdate(1, 8f, 1f, -1f, 0f, 0f, 0f));
-        final Map<Key, KeyAction> expected = new HashMap<>();
-        expected.put(Key.LEFT, KeyAction.KEYDOWN);
-        expected.put(Key.UP, KeyAction.KEYUP);
+        final Map<Key, KeyState> expected = new HashMap<>();
+        expected.put(Key.LEFT, KeyState.KEYDOWN);
+        expected.put(Key.UP, KeyState.KEYUP);
         Assert.assertEquals(c.getPressedKeys(), expected);
     }
 
@@ -25,9 +25,9 @@ public class ControllerTest {
     public void testGoToLeftUpFromToMuchDownSpeed() throws Exception {
         MockController c = new MockController();
         c.goTo(1f, 1f, new BallUpdate(1, 8.4f, 3.6f, -1f, 5f, 0f, 0f));
-        final Map<Key, KeyAction> expected = new HashMap<>();
-        expected.put(Key.LEFT, KeyAction.KEYDOWN);
-        expected.put(Key.UP, KeyAction.KEYDOWN);
+        final Map<Key, KeyState> expected = new HashMap<>();
+        expected.put(Key.LEFT, KeyState.KEYDOWN);
+        expected.put(Key.UP, KeyState.KEYDOWN);
         Assert.assertEquals(c.getPressedKeys(), expected);
     }
 
@@ -35,9 +35,9 @@ public class ControllerTest {
     public void testGoToLeftUpFromToMuchUpSpeed() throws Exception {
         MockController c = new MockController();
         c.goTo(1f, 1f, new BallUpdate(1, 8.4f, 3.6f, -1f, -5f, 0f, 0f));
-        final Map<Key, KeyAction> expected = new HashMap<>();
-        expected.put(Key.LEFT, KeyAction.KEYDOWN);
-        expected.put(Key.UP, KeyAction.KEYUP);
+        final Map<Key, KeyState> expected = new HashMap<>();
+        expected.put(Key.LEFT, KeyState.KEYDOWN);
+        expected.put(Key.UP, KeyState.KEYUP);
         Assert.assertEquals(c.getPressedKeys(), expected);
     }
 
@@ -45,9 +45,9 @@ public class ControllerTest {
     public void testGoToLeftDownFromToMuchDownSpeed() throws Exception {
         MockController c = new MockController();
         c.goTo(1f, 5f, new BallUpdate(1, 8.4f, 3.6f, -1f, 5f, 0f, 0f));
-        final Map<Key, KeyAction> expected = new HashMap<>();
-        expected.put(Key.LEFT, KeyAction.KEYDOWN);
-        expected.put(Key.DOWN, KeyAction.KEYUP);
+        final Map<Key, KeyState> expected = new HashMap<>();
+        expected.put(Key.LEFT, KeyState.KEYDOWN);
+        expected.put(Key.DOWN, KeyState.KEYUP);
         Assert.assertEquals(c.getPressedKeys(), expected);
     }
 
@@ -55,26 +55,26 @@ public class ControllerTest {
     public void testGoToLeftDownFromToMuchUpSpeed() throws Exception {
         MockController c = new MockController();
         c.goTo(1f, 5f, new BallUpdate(1, 8.4f, 3.6f, -1f, -5f, 0f, 0f));
-        final Map<Key, KeyAction> expected = new HashMap<>();
-        expected.put(Key.LEFT, KeyAction.KEYDOWN);
-        expected.put(Key.DOWN, KeyAction.KEYDOWN);
+        final Map<Key, KeyState> expected = new HashMap<>();
+        expected.put(Key.LEFT, KeyState.KEYDOWN);
+        expected.put(Key.DOWN, KeyState.KEYDOWN);
         Assert.assertEquals(c.getPressedKeys(), expected);
     }
 
 
     private class MockController extends Controller {
-        private Map<Key, KeyAction> pressedKeys = new HashMap<>();
+        private Map<Key, KeyState> pressedKeys = new HashMap<>();
 
         public MockController() {
             super(null, null);
         }
 
         @Override
-        public void key(Key key, KeyAction keyAction) {
-            pressedKeys.put(key, keyAction);
+        public void key(Key key, KeyState keyState) {
+            pressedKeys.put(key, keyState);
         }
 
-        public Map<Key, KeyAction> getPressedKeys() {
+        public Map<Key, KeyState> getPressedKeys() {
             return pressedKeys;
         }
     }

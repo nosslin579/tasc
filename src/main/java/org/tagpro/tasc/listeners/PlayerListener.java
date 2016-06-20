@@ -63,8 +63,8 @@ public class PlayerListener extends TagProServerListener {
         for (Key key : Key.values()) {
             if (keyObject.has(key.getCommand())) {
                 final int counter = keyObject.getInt(key.getCommand());
-                KeyAction keyAction = counter <= 0 ? KeyAction.KEYUP : KeyAction.KEYDOWN;
-                ret.add(new KeyUpdate(id, key, keyAction, Math.abs(counter)));
+                KeyState keyState = counter <= 0 ? KeyState.KEYUP : KeyState.KEYDOWN;
+                ret.add(new KeyUpdate(id, key, keyState, Math.abs(counter)));
             }
         }
         return ret;

@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 import org.tagpro.tasc.Command;
 import org.tagpro.tasc.GameSubscriber;
 import org.tagpro.tasc.data.Key;
-import org.tagpro.tasc.data.KeyAction;
+import org.tagpro.tasc.data.KeyState;
 import org.tagpro.tasc.data.Update;
 import org.tagpro.tasc.starter.Starter;
 
@@ -110,7 +110,7 @@ public class Gui extends Application implements GameSubscriber, Command.KeyObser
     }
 
     @Override
-    public void keyChanged(Key key, KeyAction keyAction, int count) {
+    public void keyChanged(Key key, KeyState keyState, int count) {
         if (key == Key.SPACE) {
             return;
         }
@@ -122,7 +122,7 @@ public class Gui extends Application implements GameSubscriber, Command.KeyObser
                 m.put(Key.RIGHT, right);
                 m.put(Key.DOWN, down);
                 m.put(Key.UP, up);
-                m.get(key).setText(keyAction.isPushed() ? key.name() : "--");
+                m.get(key).setText(keyState.isPushed() ? key.name() : "--");
             }
         });
     }

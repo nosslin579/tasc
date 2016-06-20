@@ -3,11 +3,11 @@ package org.tagpro.bots;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.Command;
-import org.tagpro.tasc.ConcurrentSetKeyState;
-import org.tagpro.tasc.KeyState;
+import org.tagpro.tasc.ConcurrentSetPressedKeys;
+import org.tagpro.tasc.PressedKeys;
 import org.tagpro.tasc.data.BallUpdate;
 import org.tagpro.tasc.data.Key;
-import org.tagpro.tasc.data.KeyAction;
+import org.tagpro.tasc.data.KeyState;
 import org.tagpro.tasc.data.Tile;
 import org.tagpro.tasc.extras.ServerStepEstimator;
 import org.tagpro.tasc.starter.Starter;
@@ -21,7 +21,7 @@ public class Controller implements Command.KeyObserver, ServerStepEstimator.Serv
     private final Command command;
     private final ServerStepEstimator serverStepEstimator;
 
-    private final ConcurrentSetKeyState keyState = new ConcurrentSetKeyState();
+    private final ConcurrentSetPressedKeys keyState = new ConcurrentSetPressedKeys();
 
     public Controller(Command command, ServerStepEstimator serverStepEstimator) {
         this.command = command;
@@ -38,20 +38,20 @@ public class Controller implements Command.KeyObserver, ServerStepEstimator.Serv
 
 
     @Override
-    public void keyChanged(Key key, KeyAction keyAction, int count) {
-        log.info("Key pressed:" + key + " " + keyAction);
-        keyState.setKey(key, keyAction);
+    public void keyChanged(Key key, KeyState keyState, int count) {
+        log.info("Key pressed:" + key + " " + keyState);
+        this.keyState.setKey(key, keyState);
     }
 
-    public void key(Key key, KeyAction keyAction) {
-        if (keyState.getStateFor(key) == keyAction) {
-            log.debug("Key already at state. " + key + "=" + keyAction);
+    public void key(Key key, KeyState keyState) {
+        if (this.keyState.getStateFor(key) == keyState) {
+            log.debug("Key already at state. " + key + "=" + keyState);
         } else {
-            if (keyAction == KeyAction.KEYDOWN && keyState.getStateFor(key.getOpposite()) == KeyAction.KEYDOWN) {
+            if (keyState == KeyState.KEYDOWN && this.keyState.getStateFor(key.getOpposite()) == KeyState.KEYDOWN) {
                 //release opposite key
-                command.key(key.getOpposite(), KeyAction.KEYUP);
+                command.key(key.getOpposite(), KeyState.KEYUP);
             }
-            command.key(key, keyAction);
+            command.key(key, keyState);
         }
     }
 
@@ -59,7 +59,7 @@ public class Controller implements Command.KeyObserver, ServerStepEstimator.Serv
         return keyState.isPushed(key);
     }
 
-    public KeyState getKeyState() {
+    public PressedKeys getKeyState() {
         return keyState;
     }
 
@@ -74,23 +74,23 @@ public class Controller implements Command.KeyObserver, ServerStepEstimator.Serv
     public void stop() {
         log.info("Stopping");
         for (Key key : Key.values()) {
-            key(key, KeyAction.KEYUP);
+            key(key, KeyState.KEYUP);
         }
     }
 
     public void goTo(float destinationX, float destinationY, BallUpdate update) {
-        Map<Key, KeyAction> keysForDirection = getKeysForDirection(destinationX, destinationY, update);
+        Map<Key, KeyState> keysForDirection = getKeysForDirection(destinationX, destinationY, update);
         setKeys(keysForDirection);
     }
 
-    private void setKeys(Map<Key, KeyAction> keysForDirection) {
-        for (Map.Entry<Key, KeyAction> entry : keysForDirection.entrySet()) {
+    private void setKeys(Map<Key, KeyState> keysForDirection) {
+        for (Map.Entry<Key, KeyState> entry : keysForDirection.entrySet()) {
             key(entry.getKey(), entry.getValue());
         }
     }
 
-    protected Map<Key, KeyAction> getKeysForDirection(float destinationX, float destinationY, BallUpdate update) {
-        Map<Key, KeyAction> ret = new HashMap<>();
+    protected Map<Key, KeyState> getKeysForDirection(float destinationX, float destinationY, BallUpdate update) {
+        Map<Key, KeyState> ret = new HashMap<>();
         float distanceX = destinationX - update.getRx();
         float distanceY = destinationY - update.getRy();
 
@@ -99,7 +99,7 @@ public class Controller implements Command.KeyObserver, ServerStepEstimator.Serv
         if (Math.abs(distanceX) > Math.abs(distanceY)) {
             //horizontal primary
             Key primary = distanceX > 0 ? Key.RIGHT : Key.LEFT;
-            ret.put(primary, KeyAction.KEYDOWN);
+            ret.put(primary, KeyState.KEYDOWN);
 
             //vertical secondary
             float desiredLy = (distanceY / Math.abs(distanceX)) * Math.abs(update.getLx());
@@ -110,12 +110,12 @@ public class Controller implements Command.KeyObserver, ServerStepEstimator.Serv
             boolean tooFast = shouldGoDown ? tooFastDown : tooFastUp;
 
             Key secondary = shouldGoDown ? Key.DOWN : Key.UP;
-            KeyAction action = tooFast ? KeyAction.KEYUP : KeyAction.KEYDOWN;
+            KeyState action = tooFast ? KeyState.KEYUP : KeyState.KEYDOWN;
             ret.put(secondary, action);
         } else {
             //vertical primary
             Key primary = distanceY > 0 ? Key.DOWN : Key.UP;
-            ret.put(primary, KeyAction.KEYDOWN);
+            ret.put(primary, KeyState.KEYDOWN);
 
             //horizontal secondary
             float desiredLx = (distanceX / Math.abs(distanceY)) * Math.abs(update.getLy());
@@ -127,7 +127,7 @@ public class Controller implements Command.KeyObserver, ServerStepEstimator.Serv
             boolean tooFast = shouldGoRight ? toFastRight : tooFastLeft;
 
             Key secondary = shouldGoRight ? Key.RIGHT : Key.LEFT;
-            KeyAction action = tooFast ? KeyAction.KEYUP : KeyAction.KEYDOWN;
+            KeyState action = tooFast ? KeyState.KEYUP : KeyState.KEYDOWN;
             ret.put(secondary, action);
         }
         return ret;

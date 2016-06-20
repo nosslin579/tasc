@@ -2,12 +2,12 @@ package org.tagpro.tasc.data;
 
 public class KeyChange {
     private final Key key;
-    private final KeyAction keyAction;
+    private final KeyState keyState;
     private final int step;
 
-    public KeyChange(Key key, KeyAction keyAction, int step) {
+    public KeyChange(Key key, KeyState keyState, int step) {
         this.key = key;
-        this.keyAction = keyAction;
+        this.keyState = keyState;
         this.step = step;
     }
 
@@ -15,8 +15,8 @@ public class KeyChange {
         return key;
     }
 
-    public KeyAction getKeyAction() {
-        return keyAction;
+    public KeyState getKeyState() {
+        return keyState;
     }
 
     public int getStep() {

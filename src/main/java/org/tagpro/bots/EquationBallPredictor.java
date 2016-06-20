@@ -1,15 +1,15 @@
 package org.tagpro.bots;
 
-import org.tagpro.tasc.KeyState;
+import org.tagpro.tasc.PressedKeys;
 import org.tagpro.tasc.box2d.TagProWorld;
 import org.tagpro.tasc.data.BallUpdate;
 
 public class EquationBallPredictor implements BallPredictor {
     @Override
-    public BallUpdate predict(BallUpdate ballUpdate, int stepsForward, KeyState keyState, float surface) {
+    public BallUpdate predict(BallUpdate ballUpdate, int stepsForward, PressedKeys pressedKeys, float surface) {
 
-        float verticalAc = keyState.getVerticalAcceleration(surface);
-        float horizontalAc = keyState.getHorizontalAcceleration(surface);
+        float verticalAc = pressedKeys.getVerticalAcceleration(surface);
+        float horizontalAc = pressedKeys.getHorizontalAcceleration(surface);
 
         float lx = TagProWorld.calculateSpeed(ballUpdate.getLx(), horizontalAc, stepsForward);
         float ly = TagProWorld.calculateSpeed(ballUpdate.getLy(), verticalAc, stepsForward);

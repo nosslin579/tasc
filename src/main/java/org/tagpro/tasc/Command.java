@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tagpro.tasc.data.Key;
-import org.tagpro.tasc.data.KeyAction;
+import org.tagpro.tasc.data.KeyState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +23,15 @@ public class Command {
     public Command() {
     }
 
-    public void key(Key key, KeyAction keyAction) {
+    public void key(Key key, KeyState keyState) {
         try {
             final JSONObject keyObject = new JSONObject();
             int count = keyPressCounter.getAndIncrement();
             keyObject.put("t", count);
             keyObject.put("k", key.getCommand());
-            socket.emit(keyAction.getCommand(), keyObject);
+            socket.emit(keyState.getCommand(), keyObject);
             for (KeyObserver observer : observers) {
-                observer.keyChanged(key, keyAction, count);
+                observer.keyChanged(key, keyState, count);
             }
         } catch (JSONException e) {
             throw new RuntimeException("Key failed", e);
@@ -67,6 +67,6 @@ public class Command {
     }
 
     public interface KeyObserver {
-        void keyChanged(Key key, KeyAction keyAction, int count);
+        void keyChanged(Key key, KeyState keyState, int count);
     }
 }

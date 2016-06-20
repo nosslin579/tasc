@@ -45,3 +45,13 @@ Starter s = new Starter("TheName");
 s.addListener(new GameSubscriberImpl());
 s.start();
 ```
+
+##How to enable JUtil logging?
+
+```java
+Logger rootLogger = Logger.getLogger("");
+for (Handler handler : rootLogger.getHandlers()) {
+    handler.setLevel(Level.FINE);
+}
+rootLogger.setLevel(Level.ALL);
+```

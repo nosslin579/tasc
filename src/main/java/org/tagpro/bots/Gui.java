@@ -1,4 +1,4 @@
-package org.tagpro.examples;
+package org.tagpro.bots;
 
 import javafx.application.Application;
 import javafx.application.Platform;

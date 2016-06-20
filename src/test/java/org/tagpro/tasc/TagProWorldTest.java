@@ -20,17 +20,13 @@ public class TagProWorldTest {
         player.setKey(Key.DOWN, KeyAction.KEYDOWN);
         player.getBody().setTransform(new Vec2(0, 5.2f), 0);
         player.updateVelocity();
-        int step = 876;
-        for (; step < 901; step++) {
-            tagProWorld.step();
-        }
-        Assert.assertEquals(step, 901, "step");
+        tagProWorld.setStep(876);
+        tagProWorld.proceedToStep(901);
+//        Assert.assertEquals(step, 901, "step");
         Assert.assertEquals(player.getBody().getPosition().y, 5.33f, DELTA, "ry");
         Assert.assertEquals(player.getBody().getLinearVelocity().y, 0.59f, DELTA, "ly");
-        for (; step < 916; step++) {
-            tagProWorld.step();
-        }
-        Assert.assertEquals(step, 916, "step");
+        tagProWorld.proceedToStep(916);
+//        Assert.assertEquals(step, 916, "step");
         Assert.assertEquals(player.getBody().getPosition().y, 5.5f, DELTA, "ry");
         Assert.assertEquals(player.getBody().getLinearVelocity().y, 0.87f, DELTA, "ly");
 

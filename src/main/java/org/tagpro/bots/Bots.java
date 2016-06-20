@@ -1,11 +1,11 @@
-package org.tagpro.examples;
+package org.tagpro.bots;
 
 import org.tagpro.tasc.box2d.Box2DClientSidePredictor;
 import org.tagpro.tasc.box2d.ClientSidePredictionLogger;
-import org.tagpro.tasc.data.Key;
-import org.tagpro.tasc.data.KeyAction;
-import org.tagpro.tasc.data.KeyChange;
-import org.tagpro.tasc.extras.*;
+import org.tagpro.tasc.extras.CommandFix;
+import org.tagpro.tasc.extras.FixedMovement;
+import org.tagpro.tasc.extras.MaxTime;
+import org.tagpro.tasc.extras.ServerStepEstimator;
 import org.tagpro.tasc.starter.GameInfo;
 import org.tagpro.tasc.starter.Starter;
 import org.tagpro.tasc.starter.StaticGameFinder;
@@ -20,20 +20,9 @@ public class Bots {
             throw new IllegalArgumentException("No bot to start");
         } else if (args[0].equals("PredictionBot")) {
             startPredictionBot();
-        } else if (args[0].equals("GoRightBotLeaveWhenDead")) {
-            startGoRightBotLeaveWhenDead();
         } else if (args[0].equals("Precision")) {
             startPrecision();
-        } else if (args[0].equals("FlagSnatcher")) {
-            startFlagSnatcher(args[0]);
         }
-    }
-
-    private static void startFlagSnatcher(String name) throws InterruptedException, IOException, URISyntaxException {
-        Starter s = new Starter(name);
-        s.addListener(new MaxTime(s.getCommand(), 60, TimeUnit.SECONDS));
-        FlagSnatcher.create(s);
-        GameInfo start = s.start();
     }
 
     private static void startPrecision() throws InterruptedException, IOException, URISyntaxException {
@@ -58,15 +47,6 @@ public class Bots {
         s2.setGameFinder(new StaticGameFinder(start.getGameURI()));
         s2.start();
 
-    }
-
-    private static void startGoRightBotLeaveWhenDead() throws InterruptedException, IOException, URISyntaxException {
-        Starter s = new Starter("GoRightBotLeaveWhenDead");
-        s.addListener(new ExitWhenDead(s.getCommand()));
-        s.addListener(new MaxTime(s.getCommand(), 7, TimeUnit.SECONDS));
-        s.addListener(new CommandFix(s.getCommand()));
-        s.addListener(new FixedMovement(s.getCommand(), new KeyChange(Key.RIGHT, KeyAction.KEYDOWN, 0)));
-        s.start();
     }
 
     public static void startPredictionBot() throws IOException, URISyntaxException, InterruptedException {

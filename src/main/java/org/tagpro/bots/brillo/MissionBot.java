@@ -1,10 +1,10 @@
-package org.tagpro.examples.brillo;
+package org.tagpro.bots.brillo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tagpro.examples.BallPredictor;
-import org.tagpro.examples.Controller;
-import org.tagpro.examples.EquationBallPredictor;
+import org.tagpro.bots.BallPredictor;
+import org.tagpro.bots.Controller;
+import org.tagpro.bots.EquationBallPredictor;
 import org.tagpro.tasc.GameSubscriber;
 import org.tagpro.tasc.data.Update;
 import org.tagpro.tasc.extras.GameStateService;

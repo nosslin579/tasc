@@ -1,4 +1,4 @@
-package org.tagpro.examples;
+package org.tagpro.bots;
 
 import org.tagpro.tasc.data.BallUpdate;
 import org.tagpro.tasc.data.Key;

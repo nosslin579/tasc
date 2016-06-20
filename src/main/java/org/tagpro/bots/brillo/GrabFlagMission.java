@@ -1,4 +1,4 @@
-package org.tagpro.examples.brillo;
+package org.tagpro.bots.brillo;
 
 import org.tagpro.tasc.data.*;
 import org.tagpro.tasc.extras.GameStateService;

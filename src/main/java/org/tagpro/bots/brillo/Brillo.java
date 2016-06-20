@@ -1,9 +1,9 @@
-package org.tagpro.examples.brillo;
+package org.tagpro.bots.brillo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tagpro.examples.Controller;
-import org.tagpro.examples.Gui;
+import org.tagpro.bots.Controller;
+import org.tagpro.bots.Gui;
 import org.tagpro.tasc.extras.CommandFix;
 import org.tagpro.tasc.extras.GameStateService;
 import org.tagpro.tasc.starter.GameInfo;

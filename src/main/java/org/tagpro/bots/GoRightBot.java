@@ -38,6 +38,7 @@ public class GoRightBot implements GameSubscriber {
         s.addListener(new MaxTime(s.getCommand(), 7, TimeUnit.SECONDS));
         s.addListener(new CommandFix(s.getCommand()));
         s.addListener(new GoRightBot(s.getCommand()));
+        s.setRecordEvents(true);
         s.start();
     }
 }

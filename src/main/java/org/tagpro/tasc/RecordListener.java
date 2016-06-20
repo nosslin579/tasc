@@ -11,19 +11,22 @@ public class RecordListener implements Emitter.Listener {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final String recordEventName;
-    public static final String SEPARATOR1 = "-sdfkwef1nal4viv6al8sdk9fslkd6jf4sl3d4kfew4kn4a-";
-    public static final String SEPARATOR2 = " ";
+    public static final String SEPARATOR = " ";
 
-    public RecordListener(String recordEventName) {
+    public RecordListener(String recordEventName, String separator) {
         this.recordEventName = recordEventName;
     }
 
+    public RecordListener(String recordEventName) {
+        this(recordEventName, SEPARATOR);
+    }
+
+
     @Override
     public void call(Object... args) {
-        String line = "i" + SEPARATOR2 + System.nanoTime() + SEPARATOR2 + recordEventName;
-        int i = 0;
+        String line = recordEventName;
         for (Object arg : args) {
-            line = line + SEPARATOR2 + args[i++];
+            line = line + SEPARATOR + arg;
         }
         log.debug(line);
     }

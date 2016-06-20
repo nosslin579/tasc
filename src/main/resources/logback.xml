@@ -12,7 +12,7 @@
         <file>recorded-session.log</file>
         <append>false</append>
         <encoder>
-            <pattern>%msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %msg%n</pattern>
         </encoder>
     </appender>
 

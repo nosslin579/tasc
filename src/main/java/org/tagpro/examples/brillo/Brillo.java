@@ -40,7 +40,7 @@ public class Brillo {
 
         Starter starter = new Starter("Brillo1");
         GameStateService gameStateService = GameStateService.create(starter);
-        Controller controller = Controller.create(starter.getCommand());
+        Controller controller = Controller.create(starter);
         MissionBot missionBot1 = new MissionBot(brillo, controller, gameStateService);
 
         starter.addListener(missionBot1);

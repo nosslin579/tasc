@@ -34,7 +34,7 @@ public class FlagSnatcher implements GameSubscriber {
     public static FlagSnatcher create(Starter starter) {
         GameStateService gameSubscriber = GameStateService.create(starter);
         ServerStepEstimator stepEstimator = ServerStepEstimator.create(starter);
-        Controller controller = Controller.create(starter.getCommand());
+        Controller controller = Controller.create(starter);
 
         FlagSnatcher ret = new FlagSnatcher(controller, stepEstimator, gameSubscriber);
         starter.addListener(ret);

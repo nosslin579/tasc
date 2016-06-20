@@ -85,6 +85,7 @@ public class GameStateService implements GameSubscriber {
             if (jsonObject.has("flag")) {
                 Object flag = jsonObject.optJSONObject("flag");
                 pa.setFlag(Flag.resolve(flag));
+                log.info("Setting flag " + pa);
             }
         }
     }

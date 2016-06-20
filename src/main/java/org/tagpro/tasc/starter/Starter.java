@@ -80,6 +80,9 @@ public class Starter {
     }
 
     public void addListener(GameSubscriber gameSubscriber) {
+        if (subscribers.contains(gameSubscriber)) {
+            throw new IllegalArgumentException("Can not add subscriber again. " + gameSubscriber);
+        }
         subscribers.add(gameSubscriber);
     }
 

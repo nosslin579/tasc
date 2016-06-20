@@ -9,22 +9,28 @@ import org.tagpro.tasc.data.BallUpdate;
 import org.tagpro.tasc.data.Key;
 import org.tagpro.tasc.data.KeyAction;
 import org.tagpro.tasc.data.Tile;
+import org.tagpro.tasc.extras.ServerStepEstimator;
+import org.tagpro.tasc.starter.Starter;
 
 import java.awt.geom.Point2D;
 
-public class Controller implements Command.KeyObserver {
+public class Controller implements Command.KeyObserver, ServerStepEstimator.ServerStepObserver {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final Command command;
+    private final ServerStepEstimator serverStepEstimator;
 
     private final ConcurrentSetKeyState keyState = new ConcurrentSetKeyState();
 
-    public Controller(Command command) {
+    public Controller(Command command, ServerStepEstimator serverStepEstimator) {
         this.command = command;
+        this.serverStepEstimator = serverStepEstimator;
     }
 
-    public static Controller create(Command command) {
-        Controller ret = new Controller(command);
+    public static Controller create(Starter starter) {
+        final Command command = starter.getCommand();
+        Controller ret = new Controller(command, ServerStepEstimator.create(starter));
+        ret.serverStepEstimator.addListener(ret);
         command.addObserver(ret);
         return ret;
     }
@@ -84,8 +90,14 @@ public class Controller implements Command.KeyObserver {
 
             //vertical secondary
             float desiredLy = (distanceY / Math.abs(distanceX)) * Math.abs(update.getLx());
-            Key secondary = desiredLy > 0 ? Key.DOWN : Key.UP;
-            KeyAction action = desiredLy > update.getLy() ? KeyAction.KEYUP : KeyAction.KEYDOWN;
+            float velocityDiffY = update.getLy() - desiredLy;
+            boolean shouldGoDown = distanceY > 0f;
+            boolean tooFastDown = velocityDiffY >= 0f;
+            boolean tooFastUp = velocityDiffY <= 0f;
+            boolean tooFast = shouldGoDown ? tooFastDown : tooFastUp;
+
+            Key secondary = shouldGoDown ? Key.DOWN : Key.UP;
+            KeyAction action = tooFast ? KeyAction.KEYUP : KeyAction.KEYDOWN;
             key(secondary, action);
         } else {
             //vertical primary
@@ -94,11 +106,25 @@ public class Controller implements Command.KeyObserver {
 
             //horizontal secondary
             float desiredLx = (distanceX / Math.abs(distanceY)) * Math.abs(update.getLy());
-            Key secondary = desiredLx > 0 ? Key.RIGHT : Key.LEFT;
-            KeyAction action = desiredLx > update.getLx() ? KeyAction.KEYUP : KeyAction.KEYDOWN;
+
+            float velocityDiffX = update.getLx() - desiredLx;
+            boolean shouldGoRight = distanceX > 0f;
+            boolean toFastRight = velocityDiffX >= 0f;
+            boolean tooFastLeft = velocityDiffX <= 0f;
+            boolean tooFast = shouldGoRight ? toFastRight : tooFastLeft;
+
+            Key secondary = shouldGoRight ? Key.RIGHT : Key.LEFT;
+            KeyAction action = tooFast ? KeyAction.KEYUP : KeyAction.KEYDOWN;
             key(secondary, action);
+
+
         }
 
         return new Point2D.Float(distanceX, distanceY);
+    }
+
+    @Override
+    public void onEstimateStep(int step) {
+
     }
 }

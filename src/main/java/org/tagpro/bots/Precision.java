@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Precision implements GameSubscriber, ServerStepEstimator.ServerStepObserver {
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private final Controller controller;
+    private final GamePad gamePad;
     private final ServerStepEstimator stepEstimator;
     private final BallPredictor ballPredictor = new EquationBallPredictor();
 
@@ -20,24 +20,24 @@ public class Precision implements GameSubscriber, ServerStepEstimator.ServerStep
 
     private int c = 0;
 
-    public Precision(Controller controller, ServerStepEstimator stepEstimator) {
-        this.controller = controller;
+    public Precision(GamePad gamePad, ServerStepEstimator stepEstimator) {
+        this.gamePad = gamePad;
         this.stepEstimator = stepEstimator;
     }
 
     @Override
     public void onEstimateStep(int step) {
         int diffSteps = step - lastUpdateStep;
-        BallUpdate current = ballPredictor.predict(lastUpdate, diffSteps, controller.getKeyState(), 0.025f);
+        BallUpdate current = ballPredictor.predict(lastUpdate, diffSteps, gamePad.getKeyState(), 0.025f);
         float positionIfReverse = ballPredictor.predictPositionAtHalt(current.getLx(), current.getRx(), 0.025f);
 
 //        log.info("Ac:" + verticalAc + " LastV:" + lastUpdate.getLx() + " CurrentV:" + currentVelocity + " SUSS:" + stepsUntilStandStill);
         log.info("CurrentP:" + current.getRx() + " positionIfReverse:" + positionIfReverse + " c" + c++);
-        if (lastUpdate.getLx() < -1.4f && positionIfReverse < 0.33f && controller.isPushed(Key.LEFT)) {
-            controller.key(Key.RIGHT, KeyState.KEYDOWN);
+        if (lastUpdate.getLx() < -1.4f && positionIfReverse < 0.33f && gamePad.isPushed(Key.LEFT)) {
+            gamePad.key(Key.RIGHT, KeyState.KEYDOWN);
             c = 0;
-        } else if (lastUpdate.getLx() > 1.4f && positionIfReverse > 5 && controller.isPushed(Key.RIGHT)) {
-            controller.key(Key.LEFT, KeyState.KEYDOWN);
+        } else if (lastUpdate.getLx() > 1.4f && positionIfReverse > 5 && gamePad.isPushed(Key.RIGHT)) {
+            gamePad.key(Key.LEFT, KeyState.KEYDOWN);
             c = 0;
         }
     }
@@ -55,7 +55,7 @@ public class Precision implements GameSubscriber, ServerStepEstimator.ServerStep
     @Override
     public void time(int time, GameState gameState) {
         if (gameState == GameState.ACTIVE) {
-            controller.key(Key.LEFT, KeyState.KEYDOWN);
+            gamePad.key(Key.LEFT, KeyState.KEYDOWN);
             stepEstimator.addListener(this);
         }
     }

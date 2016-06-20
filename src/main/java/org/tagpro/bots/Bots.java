@@ -27,9 +27,9 @@ public class Bots {
 
     private static void startPrecision() throws InterruptedException, IOException, URISyntaxException {
         Starter s = new Starter("Precision");
-        Controller controller = Controller.create(s);
+        GamePad gamePad = GamePad.create(s);
         ServerStepEstimator stepEstimator = new ServerStepEstimator(s.getCommand());
-        Precision precision = new Precision(controller, stepEstimator);
+        Precision precision = new Precision(gamePad, stepEstimator);
         s.addListener(new MaxTime(s.getCommand(), 60, TimeUnit.SECONDS));
         s.addListener(new CommandFix(s.getCommand()));
         s.addListener(stepEstimator);
@@ -37,9 +37,9 @@ public class Bots {
         GameInfo start = s.start();
 
         Starter s2 = new Starter("Precision2");
-        Controller controller2 = Controller.create(s2);
+        GamePad gamePad2 = GamePad.create(s2);
         ServerStepEstimator stepEstimator2 = new ServerStepEstimator(s2.getCommand());
-        Precision precision2 = new Precision(controller2, stepEstimator2);
+        Precision precision2 = new Precision(gamePad2, stepEstimator2);
         s2.addListener(new MaxTime(s2.getCommand(), 60, TimeUnit.SECONDS));
         s2.addListener(new CommandFix(s2.getCommand()));
         s2.addListener(stepEstimator2);

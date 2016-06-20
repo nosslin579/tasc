@@ -2,7 +2,7 @@ package org.tagpro.bots.brillo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tagpro.bots.Controller;
+import org.tagpro.bots.GamePad;
 import org.tagpro.bots.Gui;
 import org.tagpro.tasc.extras.CommandFix;
 import org.tagpro.tasc.extras.GameStateService;
@@ -25,8 +25,8 @@ public class Brillo {
 
         Starter starter = new Starter("Brillo1");
         GameStateService gameStateService = GameStateService.create(starter);
-        Controller controller = Controller.create(starter);
-        MissionBot missionBot1 = new MissionBot(brillo, controller, gameStateService);
+        GamePad gamePad = GamePad.create(starter);
+        MissionBot missionBot1 = new MissionBot(brillo, gamePad, gameStateService);
 
         starter.addListener(missionBot1);
         starter.addListener(Gui.create(starter));

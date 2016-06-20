@@ -8,7 +8,7 @@ public class PendingMission implements Mission {
 
     @Override
     public void act(int step, Map<Integer, Update> updates, MissionBot bot) {
-        bot.getController().stop();
+        bot.getGamePad().stop();
     }
 
     @Override

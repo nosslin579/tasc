@@ -15,7 +15,7 @@ import org.tagpro.tasc.starter.Starter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Controller implements Command.KeyObserver, ServerStepEstimator.ServerStepObserver {
+public class GamePad implements Command.KeyObserver, ServerStepEstimator.ServerStepObserver {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final Command command;
@@ -23,14 +23,14 @@ public class Controller implements Command.KeyObserver, ServerStepEstimator.Serv
 
     private final ConcurrentSetPressedKeys keyState = new ConcurrentSetPressedKeys();
 
-    public Controller(Command command, ServerStepEstimator serverStepEstimator) {
+    public GamePad(Command command, ServerStepEstimator serverStepEstimator) {
         this.command = command;
         this.serverStepEstimator = serverStepEstimator;
     }
 
-    public static Controller create(Starter starter) {
+    public static GamePad create(Starter starter) {
         final Command command = starter.getCommand();
-        Controller ret = new Controller(command, ServerStepEstimator.create(starter));
+        GamePad ret = new GamePad(command, ServerStepEstimator.create(starter));
         ret.serverStepEstimator.addListener(ret);
         command.addObserver(ret);
         return ret;

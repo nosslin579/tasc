@@ -9,11 +9,11 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ControllerTest {
+public class GamePadTest {
 
     @Test
     public void testGoToLeftFromStandstill() throws Exception {
-        MockController c = new MockController();
+        MockGamePad c = new MockGamePad();
         c.goTo(1f, 1f, new BallUpdate(1, 8f, 1f, -1f, 0f, 0f, 0f));
         final Map<Key, KeyState> expected = new HashMap<>();
         expected.put(Key.LEFT, KeyState.KEYDOWN);
@@ -23,7 +23,7 @@ public class ControllerTest {
 
     @Test
     public void testGoToLeftUpFromToMuchDownSpeed() throws Exception {
-        MockController c = new MockController();
+        MockGamePad c = new MockGamePad();
         c.goTo(1f, 1f, new BallUpdate(1, 8.4f, 3.6f, -1f, 5f, 0f, 0f));
         final Map<Key, KeyState> expected = new HashMap<>();
         expected.put(Key.LEFT, KeyState.KEYDOWN);
@@ -33,7 +33,7 @@ public class ControllerTest {
 
     @Test
     public void testGoToLeftUpFromToMuchUpSpeed() throws Exception {
-        MockController c = new MockController();
+        MockGamePad c = new MockGamePad();
         c.goTo(1f, 1f, new BallUpdate(1, 8.4f, 3.6f, -1f, -5f, 0f, 0f));
         final Map<Key, KeyState> expected = new HashMap<>();
         expected.put(Key.LEFT, KeyState.KEYDOWN);
@@ -43,7 +43,7 @@ public class ControllerTest {
 
     @Test
     public void testGoToLeftDownFromToMuchDownSpeed() throws Exception {
-        MockController c = new MockController();
+        MockGamePad c = new MockGamePad();
         c.goTo(1f, 5f, new BallUpdate(1, 8.4f, 3.6f, -1f, 5f, 0f, 0f));
         final Map<Key, KeyState> expected = new HashMap<>();
         expected.put(Key.LEFT, KeyState.KEYDOWN);
@@ -53,7 +53,7 @@ public class ControllerTest {
 
     @Test
     public void testGoToLeftDownFromToMuchUpSpeed() throws Exception {
-        MockController c = new MockController();
+        MockGamePad c = new MockGamePad();
         c.goTo(1f, 5f, new BallUpdate(1, 8.4f, 3.6f, -1f, -5f, 0f, 0f));
         final Map<Key, KeyState> expected = new HashMap<>();
         expected.put(Key.LEFT, KeyState.KEYDOWN);
@@ -62,10 +62,10 @@ public class ControllerTest {
     }
 
 
-    private class MockController extends Controller {
+    private class MockGamePad extends GamePad {
         private Map<Key, KeyState> pressedKeys = new HashMap<>();
 
-        public MockController() {
+        public MockGamePad() {
             super(null, null);
         }
 

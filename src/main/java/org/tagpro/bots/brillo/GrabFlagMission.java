@@ -14,7 +14,7 @@ public class GrabFlagMission implements Mission {
         if (self != null && self.getBallUpdate() != null && gameStateService.getGameState() == GameState.ACTIVE) {
             Team team = gameStateService.getSelfPlayerAttribute().getTeam();
             Tile flagTile = gameStateService.getMap().getTile(team.getOppositeFlagTileType());
-            bot.getController().goTo(flagTile, self.getBallUpdate());
+            bot.getGamePad().goTo(flagTile, self.getBallUpdate());
         }
     }
 

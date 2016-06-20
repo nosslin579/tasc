@@ -16,7 +16,7 @@ public class ReturnWithFlagMission implements Mission {
         if (self != null && self.getBallUpdate() != null && gameStateService.getGameState() == GameState.ACTIVE) {
             Team ownTeam = gameStateService.getSelfPlayerAttribute().getTeam();
             Tile ownFlagTile = gameStateService.getMap().getTile(ownTeam.getFlag().getTileType());
-            bot.getController().goTo(ownFlagTile, self.getBallUpdate());
+            bot.getGamePad().goTo(ownFlagTile, self.getBallUpdate());
         }
     }
 

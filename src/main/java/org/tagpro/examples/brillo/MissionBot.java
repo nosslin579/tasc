@@ -23,15 +23,14 @@ public class MissionBot implements GameSubscriber {
         this.brillo = brillo;
         this.controller = controller;
         this.gameStateService = gameStateService;
-        this.mission = brillo.getPendingMission();
+        this.mission = new PendingMission();
     }
 
     @Override
     public void onUpdate(int step, Map<Integer, Update> updates) {
         final MissionStatus missionStatus = mission.getMissionStatus(this);
         if (missionStatus != MissionStatus.IN_PROGRESS) {
-            mission = brillo.getNewMission(mission, missionStatus);
-            log.info("Got new mission:" + mission);
+            mission = brillo.missionEnd(this, missionStatus);
         }
         mission.act(step, updates, this);
     }
@@ -42,5 +41,9 @@ public class MissionBot implements GameSubscriber {
 
     public Controller getController() {
         return controller;
+    }
+
+    public Mission getMission() {
+        return mission;
     }
 }

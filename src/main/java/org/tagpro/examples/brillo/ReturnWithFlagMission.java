@@ -14,9 +14,9 @@ public class ReturnWithFlagMission implements Mission {
         final GameStateService gameStateService = bot.getGameStateService();
         Update self = updates.get(gameStateService.getId());
         if (self != null && self.getBallUpdate() != null && gameStateService.getGameState() == GameState.ACTIVE) {
-            Team team = gameStateService.getSelfPlayerAttribute().getTeam();
-            Tile flagTile = gameStateService.getMap().getTile(team.getFlag().getTileType());
-            bot.getController().goTo(flagTile, self.getBallUpdate());
+            Team ownTeam = gameStateService.getSelfPlayerAttribute().getTeam();
+            Tile ownFlagTile = gameStateService.getMap().getTile(ownTeam.getFlag().getTileType());
+            bot.getController().goTo(ownFlagTile, self.getBallUpdate());
         }
     }
 
@@ -26,6 +26,11 @@ public class ReturnWithFlagMission implements Mission {
             return MissionStatus.IN_PROGRESS;
         }
         return MissionStatus.SUCCESS;
+    }
+
+    @Override
+    public Mission getConsecutiveMission() {
+        return new GrabFlagMission();
     }
 
     @Override

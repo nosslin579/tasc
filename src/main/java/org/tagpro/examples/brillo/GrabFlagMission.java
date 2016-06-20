@@ -30,6 +30,11 @@ public class GrabFlagMission implements Mission {
     }
 
     @Override
+    public Mission getConsecutiveMission() {
+        return new ReturnWithFlagMission();
+    }
+
+    @Override
     public String toString() {
         return "GrabFlagMission{}";
     }

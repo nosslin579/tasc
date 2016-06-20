@@ -8,4 +8,6 @@ public interface Mission {
     void act(int step, Map<Integer, Update> updates, MissionBot bot);
 
     MissionStatus getMissionStatus(MissionBot bot);
+
+    Mission getConsecutiveMission();
 }

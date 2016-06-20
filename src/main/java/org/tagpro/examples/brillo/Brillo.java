@@ -15,24 +15,9 @@ import java.net.URISyntaxException;
 public class Brillo {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private final Mission grabFlagMission = new GrabFlagMission();
-    private final Mission returnWithFlagMission = new ReturnWithFlagMission();
-    private final Mission pendingMission = new PendingMission();
-
-    public Mission getNewMission(Mission mission, MissionStatus missionStatus) {
-        log.info("Current:" + mission + " Mission status:" + missionStatus);
-        if (mission == grabFlagMission && missionStatus == MissionStatus.SUCCESS) {
-            return returnWithFlagMission;
-        } else if (mission == returnWithFlagMission && missionStatus != MissionStatus.IN_PROGRESS) {
-            return grabFlagMission;
-        } else if (mission == pendingMission) {
-            return grabFlagMission;
-        }
-        return grabFlagMission;
-    }
-
-    public Mission getPendingMission() {
-        return pendingMission;
+    public Mission missionEnd(MissionBot mission, MissionStatus missionStatus) {
+        log.info("Mission end:" + mission + " with status:" + missionStatus);
+        return mission.getMission().getConsecutiveMission();
     }
 
     public static void main(String[] args) throws InterruptedException, IOException, URISyntaxException {

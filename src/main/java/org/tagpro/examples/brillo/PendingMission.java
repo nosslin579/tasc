@@ -17,6 +17,11 @@ public class PendingMission implements Mission {
     }
 
     @Override
+    public Mission getConsecutiveMission() {
+        return new GrabFlagMission();
+    }
+
+    @Override
     public String toString() {
         return "PendingMission{}";
     }

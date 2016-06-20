@@ -123,6 +123,7 @@ public class Starter {
         }
         if (recordEvents) {
             List<String> recordEvents = Arrays.asList("connect", "chat", "map", "mapupdate", "spawn", "p", "banned", "end", "full", "id", "score", "time");
+            log.info("Recording incoming socket events to 'recorded-session.log'");
             for (String recordEvent : recordEvents) {
                 socket.on(recordEvent, new RecordListener(recordEvent));
             }

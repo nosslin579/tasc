@@ -71,6 +71,7 @@ public class GameStateService implements GameSubscriber {
             JSONObject jsonObject = update.getPlayerUpdateObject();
             if (jsonObject.has("dead")) {
                 pa.setDead(jsonObject.optBoolean("dead"));
+                log.info("Setting dead. " + pa);
             }
             if (jsonObject.has("bomb")) {
                 pa.setBomb(jsonObject.optBoolean("bomb"));
@@ -83,9 +84,9 @@ public class GameStateService implements GameSubscriber {
                 pa.setTeam(Team.resolve(team));
             }
             if (jsonObject.has("flag")) {
-                Object flag = jsonObject.optJSONObject("flag");
+                int flag = jsonObject.isNull("flag") ? 0 : jsonObject.optInt("flag");
                 pa.setFlag(Flag.resolve(flag));
-                log.info("Setting flag " + pa);
+                log.info("Setting flag. " + pa);
             }
         }
     }

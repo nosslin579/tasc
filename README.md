@@ -4,16 +4,16 @@ Tagpro Asynchronous Socket Client for Java
 
 ##What is Tasc?
 
-Tasc is a connector for the super awesome game [Tagpro](http://tagpro.koalabeast.com/) made in Java
+Tasc is a connector for the super awesome game [TagPro](http://tagpro.koalabeast.com/) made in Java
 
 
 ##What can Tasc do?
 
-* Retreive a Tagpro ID neccessary for connecting to a game.
+* Retreive a TagPro ID neccessary for connecting to a game.
 * Find a game using the joiner socket
 * Start a game by uploading a map
 * Connect to the game socket, send commands and retreive data
-* Run the Box2D physics engine with Tagpro settings
+* Run the Box2D physics engine with TagPro settings
 
 ##What can Tasc be used for?
 

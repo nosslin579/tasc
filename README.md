@@ -2,12 +2,12 @@
 
 Tagpro Asynchronous Socket Client for Java
 
-##What is Tasc?
+## What is Tasc?
 
 Tasc is a connector for the super awesome game [TagPro](http://tagpro.koalabeast.com/) made in Java
 
 
-##What can Tasc do?
+## What can Tasc do?
 
 * Retreive a TagPro ID neccessary for connecting to a game.
 * Find a game using the joiner socket
@@ -15,13 +15,13 @@ Tasc is a connector for the super awesome game [TagPro](http://tagpro.koalabeast
 * Connect to the game socket, send commands and retreive data
 * Run the Box2D physics engine with TagPro settings
 
-##What can Tasc be used for?
+## What can Tasc be used for?
 
 * A bot
 * An Android app
 * A standalone java client
 
-##The todo list
+## The todo list
 
 * Add support for map tiles in TagproWorld
 * Complete the Box2DClientSidePredictor
@@ -32,7 +32,7 @@ Tasc is a connector for the super awesome game [TagPro](http://tagpro.koalabeast
 * Add documentation
 
 
-##How do I run Tasc?
+## How do I run Tasc?
 
 1. Clone repo
 2. Run *mvn clean install*
@@ -40,7 +40,7 @@ Tasc is a connector for the super awesome game [TagPro](http://tagpro.koalabeast
 
 This will run upload map test, connect, when game start right key pressed and finally exit when ball hits spike.
 
-##How do I use Tasc?
+## How do I use Tasc?
 
 Create a class that implements `GameSubscriber`:
 
@@ -69,7 +69,7 @@ s.addListener(new CommandFix(s.getCommand()));
 s.start();
 ```
 
-##How to enable JUtil logging?
+## How to enable JUtil logging?
 
 ```java
 Logger rootLogger = Logger.getLogger("");
